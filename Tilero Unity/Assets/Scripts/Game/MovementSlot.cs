@@ -231,16 +231,29 @@ public class MovementSlot : MonoBehaviour, IPointerDownHandler, IPointerUpHandle
             holdCheckCoroutine = null;
         }
         
+        // Slot \u00fczerinde release edildi mi kontrol et
+        bool releasedOnSlot = eventData.pointerCurrentRaycast.gameObject == gameObject || 
+                               (eventData.pointerCurrentRaycast.gameObject != null && 
+                                eventData.pointerCurrentRaycast.gameObject.transform.IsChildOf(transform));
+        
         OnSlotReleased?.Invoke(slotIndex, assignedPattern);
         
         if (!holdEventTriggered && pressDuration < holdThreshold)
         {
+            // Quick tap - her zaman hareket et
             OnSlotClicked?.Invoke(slotIndex, assignedPattern);
             Debug.Log($"[MovementSlot] Clicked slot {slotIndex} (quick tap)");
         }
+        else if (holdEventTriggered && releasedOnSlot)
+        {
+            // Hold sonras\u0131 slot \u00fczerinde release - hareket et
+            OnSlotClicked?.Invoke(slotIndex, assignedPattern);
+            Debug.Log($"[MovementSlot] Released on slot {slotIndex} after hold - executing pattern");
+        }
         else
         {
-            Debug.Log($"[MovementSlot] Released slot {slotIndex} after hold");
+            // Hold sonras\u0131 slot d\u0131\u015f\u0131nda release - hareket etme
+            Debug.Log($"[MovementSlot] Released outside slot {slotIndex} after hold - cancelling");
         }
     }
     

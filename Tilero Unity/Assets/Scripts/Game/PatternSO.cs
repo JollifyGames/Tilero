@@ -12,9 +12,9 @@ public class PatternSO : ScriptableObject
     [Header("Pattern Steps")]
     [SerializeField] private List<PatternStep> steps = new List<PatternStep>();
     
-    public string PatternName => patternName;
-    public string Description => description;
-    public List<PatternStep> Steps => steps;
+    public virtual string PatternName => patternName;
+    public virtual string Description => description;
+    public virtual List<PatternStep> Steps => steps;
     
     [System.Serializable]
     public class PatternStep
@@ -30,10 +30,10 @@ public class PatternSO : ScriptableObject
     }
     
     // MovementPattern'e dönüştürme metodu (geriye uyumluluk için)
-    public MovementPattern ToMovementPattern()
+    public virtual MovementPattern ToMovementPattern()
     {
-        MovementPattern pattern = new MovementPattern(patternName);
-        foreach (var step in steps)
+        MovementPattern pattern = new MovementPattern(PatternName);
+        foreach (var step in Steps)
         {
             pattern.Steps.Add(step.position);
         }

@@ -55,6 +55,9 @@ public class SlotManager : MonoBehaviour, IManager
             {
                 movementSlots[i].Initialize(i);
                 movementSlots[i].OnSlotClicked += OnSlotClicked;
+                movementSlots[i].OnSlotPressed += OnSlotPressed;
+                movementSlots[i].OnSlotReleased += OnSlotReleased;
+                movementSlots[i].OnSlotHeld += OnSlotHeld;
             }
         }
         
@@ -135,6 +138,37 @@ public class SlotManager : MonoBehaviour, IManager
         }
     }
     
+    private void OnSlotPressed(int slotIndex, PatternSO pattern)
+    {
+        Debug.Log($"[SlotManager] Slot {slotIndex} pressed");
+        
+        // Press an\u0131nda hemen preview g\u00f6ster
+        if (pattern == null || BoardManager.Instance == null || GridManager.Instance == null)
+            return;
+        
+        Vector2Int currentCell = BoardManager.Instance.GetPlayerCell();
+        MovementPattern movementPattern = pattern.ToMovementPattern();
+        List<Vector2Int> previewPositions = movementPattern.GetAbsoluteSteps(currentCell, Direction.Up);
+        
+        GridManager.Instance.ShowPatternPreview(previewPositions);
+    }
+    
+    private void OnSlotHeld(int slotIndex, PatternSO pattern)
+    {
+        // Hold oldu\u011funda bir \u015fey yapmaya gerek yok, preview zaten g\u00f6steriliyor
+        Debug.Log($"[SlotManager] Slot {slotIndex} held with pattern: {pattern.PatternName}");
+    }
+    
+    private void OnSlotReleased(int slotIndex, PatternSO pattern)
+    {
+        Debug.Log($"[SlotManager] Slot {slotIndex} released");
+        
+        if (GridManager.Instance != null)
+        {
+            GridManager.Instance.ClearPatternPreview();
+        }
+    }
+    
     private void OnDestroy()
     {
         foreach (var slot in movementSlots)
@@ -142,6 +176,9 @@ public class SlotManager : MonoBehaviour, IManager
             if (slot != null)
             {
                 slot.OnSlotClicked -= OnSlotClicked;
+                slot.OnSlotPressed -= OnSlotPressed;
+                slot.OnSlotReleased -= OnSlotReleased;
+                slot.OnSlotHeld -= OnSlotHeld;
             }
         }
     }

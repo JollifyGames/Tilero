@@ -24,10 +24,33 @@ public class DeckService
             return;
         }
         
-        List<PatternSO> allCards = deckSO.GetAllCards();
+        List<PatternSO> allCards = new List<PatternSO>();
+        List<PatternSO> originalCards = deckSO.GetAllCards();
+        
+        // Her kart için 4 rotasyon ekle (0°, 90°, 180°, 270°)
+        foreach (var card in originalCards)
+        {
+            // 0° - Original
+            allCards.Add(card);
+            
+            // 90°
+            PatternSO rotated90 = RotatedPatternSO.CreateRotatedPattern(card, 90);
+            allCards.Add(rotated90);
+            
+            // 180°
+            PatternSO rotated180 = RotatedPatternSO.CreateRotatedPattern(card, 180);
+            allCards.Add(rotated180);
+            
+            // 270°
+            PatternSO rotated270 = RotatedPatternSO.CreateRotatedPattern(card, 270);
+            allCards.Add(rotated270);
+            
+            Debug.Log($"[DeckService] Added 4 rotations of {card.PatternName}");
+        }
+        
         ShuffleAndRefillDeck(allCards);
         
-        Debug.Log($"[DeckService] Deck initialized with {drawPile.Count} cards");
+        Debug.Log($"[DeckService] Deck initialized with {drawPile.Count} cards ({originalCards.Count} unique patterns x 4 rotations)");
     }
     
     private void ShuffleAndRefillDeck(List<PatternSO> cards)

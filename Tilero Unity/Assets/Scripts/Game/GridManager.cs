@@ -14,7 +14,12 @@ public class GridManager : MonoBehaviour, IManager
     [SerializeField] private GameObject testPrefab;
     [SerializeField] private Transform cellParent;
     
+    [Header("Preview Settings")]
+    [SerializeField] private GameObject previewPrefab;
+    [SerializeField] private Transform previewParent;
+    
     private GridCell[,] grid;
+    private System.Collections.Generic.List<GameObject> activePreviewObjects = new System.Collections.Generic.List<GameObject>();
     
     public Vector2Int GridSize => gridSize;
     public Vector3 GridWorldPosition => gridWorldPosition;
@@ -109,5 +114,48 @@ public class GridManager : MonoBehaviour, IManager
     public GridCell[,] GetGrid()
     {
         return grid;
+    }
+    
+    public void ShowPatternPreview(System.Collections.Generic.List<Vector2Int> positions)
+    {
+        ClearPatternPreview();
+        
+        if (previewPrefab == null)
+        {
+            Debug.LogWarning("[GridManager] Preview prefab not assigned!");
+            return;
+        }
+        
+        if (previewParent == null)
+        {
+            GameObject parentObject = new GameObject("PreviewObjects");
+            parentObject.transform.position = gridWorldPosition;
+            previewParent = parentObject.transform;
+        }
+        
+        foreach (var pos in positions)
+        {
+            if (IsValidPosition(pos.x, pos.y))
+            {
+                Vector3 worldPos = GetCellWorldPosition(pos.x, pos.y);
+                GameObject preview = Instantiate(previewPrefab, worldPos, Quaternion.identity, previewParent);
+                preview.name = $"Preview_{pos.x}_{pos.y}";
+                activePreviewObjects.Add(preview);
+            }
+        }
+        
+        Debug.Log($"[GridManager] Showing preview for {activePreviewObjects.Count} cells");
+    }
+    
+    public void ClearPatternPreview()
+    {
+        foreach (var preview in activePreviewObjects)
+        {
+            if (preview != null)
+                Destroy(preview);
+        }
+        activePreviewObjects.Clear();
+        
+        Debug.Log("[GridManager] Pattern preview cleared");
     }
 }
