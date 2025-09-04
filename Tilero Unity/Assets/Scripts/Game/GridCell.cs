@@ -8,6 +8,8 @@ public class GridCell
     public Vector3 WorldPosition { get; private set; }
     public bool IsOccupied { get; set; }
     public GameObject OccupyingObject { get; set; }
+    public GameObject OccupiedObject => OccupyingObject; // Alias for compatibility
+    public Vector2Int GridPosition => new Vector2Int(X, Y);
     
     public GridCell(int x, int y, Vector3 worldPosition)
     {

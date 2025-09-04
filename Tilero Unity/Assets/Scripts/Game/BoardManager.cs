@@ -142,4 +142,118 @@ public class BoardManager : MonoBehaviour, IManager
     {
         return currentPlayerCell;
     }
+    
+    public void RegisterObject(GameObject obj, Vector2Int gridPosition)
+    {
+        if (!GridManager.Instance.IsValidPosition(gridPosition.x, gridPosition.y))
+        {
+            Debug.LogError($"[BoardManager] Cannot register object at invalid position: {gridPosition}");
+            return;
+        }
+        
+        GridCell cell = GridManager.Instance.GetCell(gridPosition.x, gridPosition.y);
+        if (cell.IsOccupied)
+        {
+            Debug.LogWarning($"[BoardManager] Cell {gridPosition} is already occupied!");
+            return;
+        }
+        
+        cell.SetOccupied(obj);
+        Debug.Log($"[BoardManager] Registered {obj.name} at cell {gridPosition}");
+    }
+    
+    public EnemyCharacter FindEnemyInDirection(Vector2Int position, Direction direction)
+    {
+        // Önce direction'a göre ilk cell'i kontrol et
+        Vector2Int checkPositions = GetDirectionVector(direction);
+        Vector2Int targetCell = position + checkPositions;
+        
+        EnemyCharacter enemy = GetEnemyAtPosition(targetCell);
+        if (enemy != null)
+        {
+            Debug.Log($"[BoardManager] Found enemy at {targetCell} in forward direction");
+            return enemy;
+        }
+        
+        // Yan cell'leri kontrol et (sağ ve sol)
+        Vector2Int[] sidePositions = GetSidePositions(direction);
+        foreach (var sideOffset in sidePositions)
+        {
+            targetCell = position + sideOffset;
+            enemy = GetEnemyAtPosition(targetCell);
+            if (enemy != null)
+            {
+                Debug.Log($"[BoardManager] Found enemy at {targetCell} in side direction");
+                return enemy;
+            }
+        }
+        
+        return null;
+    }
+    
+    private EnemyCharacter GetEnemyAtPosition(Vector2Int position)
+    {
+        if (!GridManager.Instance.IsValidPosition(position.x, position.y))
+            return null;
+        
+        GridCell cell = GridManager.Instance.GetCell(position.x, position.y);
+        if (cell.IsOccupied && cell.OccupiedObject != null)
+        {
+            return cell.OccupiedObject.GetComponent<EnemyCharacter>();
+        }
+        
+        return null;
+    }
+    
+    private Vector2Int GetDirectionVector(Direction direction)
+    {
+        switch (direction)
+        {
+            case Direction.Up: return Vector2Int.up;
+            case Direction.Down: return Vector2Int.down;
+            case Direction.Left: return Vector2Int.left;
+            case Direction.Right: return Vector2Int.right;
+            default: return Vector2Int.zero;
+        }
+    }
+    
+    private Vector2Int[] GetSidePositions(Direction direction)
+    {
+        switch (direction)
+        {
+            case Direction.Up:
+            case Direction.Down:
+                return new Vector2Int[] { Vector2Int.left, Vector2Int.right };
+            case Direction.Left:
+            case Direction.Right:
+                return new Vector2Int[] { Vector2Int.up, Vector2Int.down };
+            default:
+                return new Vector2Int[] { };
+        }
+    }
+    
+    public Direction GetDirectionToTarget(Vector2Int from, Vector2Int to)
+    {
+        Vector2Int diff = to - from;
+        
+        if (diff.x > 0) return Direction.Right;
+        if (diff.x < 0) return Direction.Left;
+        if (diff.y > 0) return Direction.Up;
+        if (diff.y < 0) return Direction.Down;
+        
+        return Direction.Down; // Default
+    }
+    
+    public void ClearGridPosition(Vector2Int gridPosition)
+    {
+        if (GridManager.Instance.IsValidPosition(gridPosition.x, gridPosition.y))
+        {
+            GridCell cell = GridManager.Instance.GetCell(gridPosition.x, gridPosition.y);
+            if (cell != null)
+            {
+                cell.ClearOccupation();
+                Debug.Log($"[BoardManager] Cleared grid position {gridPosition}");
+            }
+        }
+    }
 }

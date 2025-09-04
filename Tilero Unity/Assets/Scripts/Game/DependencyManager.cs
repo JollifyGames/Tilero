@@ -10,6 +10,8 @@ public class DependencyManager : MonoBehaviour
     [SerializeField] private GridManager gridManager;
     [SerializeField] private BoardManager boardManager;
     [SerializeField] private SlotManager slotManager;
+    [SerializeField] private EnemyManager enemyManager;
+    [SerializeField] private WorldManager worldManager;
     
     private List<IManager> managers = new List<IManager>();
     private int initializedManagerCount = 0;
@@ -39,6 +41,12 @@ public class DependencyManager : MonoBehaviour
         
         if (slotManager != null)
             managers.Add(slotManager);
+        
+        if (enemyManager != null)
+            managers.Add(enemyManager);
+        
+        if (worldManager != null)
+            managers.Add(worldManager);
     }
     
     private void InitializeManagers()

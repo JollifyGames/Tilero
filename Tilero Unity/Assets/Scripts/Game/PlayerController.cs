@@ -178,22 +178,25 @@ public class PlayerController : MonoBehaviour
         UpdateVisualDirection();
     }
     
-    public void ExecuteMovementPattern(MovementPattern pattern, List<Vector2Int> absoluteSteps)
+    public void ExecuteMovementPattern(PatternSO pattern, List<Vector2Int> absoluteSteps)
     {
         if (isMoving || pattern == null || absoluteSteps.Count == 0) return;
         
         StartCoroutine(ExecutePatternSequence(pattern, absoluteSteps));
     }
     
-    private IEnumerator ExecutePatternSequence(MovementPattern pattern, List<Vector2Int> absoluteSteps)
+    private IEnumerator ExecutePatternSequence(PatternSO pattern, List<Vector2Int> absoluteSteps)
     {
         canMove = false;
         // boardManager.SetMovingState(true); // Bu satır TryMoveObject'i blokluyor
         
         Debug.Log($"[PlayerController] Executing pattern: {pattern.PatternName} with {absoluteSteps.Count} steps");
         
-        Vector2Int currentCell = boardManager.GetPlayerCell();
+        Vector2Int startCell = boardManager.GetPlayerCell();
+        Vector2Int currentCell = startCell;
+        PieceType currentPieceType = PieceType.Basic; // Default
         
+        int stepIndex = 0;
         foreach (var targetCell in absoluteSteps)
         {
             Vector2Int moveDirection = targetCell - currentCell;
@@ -215,6 +218,13 @@ public class PlayerController : MonoBehaviour
                     // MoveToPositionForPattern tamamlanana kadar bekle
                     yield return new WaitUntil(() => !isMoving);
                     currentCell = targetCell;
+                    
+                    // Player'ın durduğu pozisyonun PieceType'ını bul
+                    if (stepIndex < pattern.Steps.Count)
+                    {
+                        currentPieceType = pattern.Steps[stepIndex].pieceType;
+                        Debug.Log($"[PlayerController] Moved to step {stepIndex}, PieceType: {currentPieceType}");
+                    }
                 }
                 else
                 {
@@ -222,11 +232,84 @@ public class PlayerController : MonoBehaviour
                     break;
                 }
             }
+            stepIndex++;
         }
         
         canMove = true;
         // boardManager.SetMovingState(false);
-        Debug.Log($"[PlayerController] Pattern execution completed");
+        Debug.Log($"[PlayerController] Pattern execution completed at position with PieceType: {currentPieceType}");
+        
+        // Defense PieceType kontrolü
+        if (currentPieceType == PieceType.Defense)
+        {
+            PlayerCharacter playerChar = GetComponent<PlayerCharacter>();
+            if (playerChar != null)
+            {
+                playerChar.ApplyDefenseBuff();
+                Debug.Log("[PlayerController] Defense buff applied!");
+            }
+        }
+        
+        // Pattern tamamlandıktan sonra enemy kontrol et ve attack yap
+        yield return CheckAndAttackEnemy(currentPieceType);
+        
+        // Attack işlemi bittikten sonra turn'ü enemy'e geç
+        if (WorldManager.Instance != null)
+        {
+            WorldManager.Instance.OnPlayerActionComplete();
+        }
+    }
+    
+    private IEnumerator CheckAndAttackEnemy(PieceType pieceType)
+    {
+        // Player ve Defense piece type'ları attack yapmaz
+        if (pieceType == PieceType.Player || pieceType == PieceType.Defense)
+        {
+            Debug.Log($"[PlayerController] PieceType {pieceType} does not trigger attack");
+            yield break;
+        }
+        
+        Vector2Int currentPosition = boardManager.GetPlayerCell();
+        EnemyCharacter enemy = boardManager.FindEnemyInDirection(currentPosition, currentDirection);
+        
+        if (enemy != null)
+        {
+            // Enemy bulundu, enemy'e doğru dön
+            Vector2Int enemyPosition = GridManager.Instance.GetCellFromWorldPosition(enemy.transform.position).GridPosition;
+            Direction directionToEnemy = boardManager.GetDirectionToTarget(currentPosition, enemyPosition);
+            
+            if (directionToEnemy != currentDirection)
+            {
+                SetDirection(directionToEnemy);
+                yield return new WaitForSeconds(rotationDuration); // Dönüş animasyonu bitene kadar bekle
+            }
+            
+            // Attack uygula (sadece Basic, Attack, Special için)
+            Attack(enemy, pieceType);
+        }
+    }
+    
+    private void Attack(EnemyCharacter target, PieceType pieceType)
+    {
+        Debug.Log($"[PlayerController] === ATTACK === Attacking {target.gameObject.name} with PieceType: {pieceType}!");
+        
+        // Get player damage from model
+        PlayerCharacter playerChar = GetComponent<PlayerCharacter>();
+        if (playerChar == null || playerChar.Model == null)
+        {
+            Debug.LogError("[PlayerController] PlayerCharacter or Model not found!");
+            return;
+        }
+        
+        // Calculate damage using multiplier from PlayerCharacter
+        float multiplier = playerChar.GetDamageMultiplier(pieceType);
+        int baseDamage = playerChar.Model.Damage;
+        int damageAmount = Mathf.RoundToInt(baseDamage * multiplier);
+        
+        Debug.Log($"[PlayerController] {pieceType} attack - Base: {baseDamage} x {multiplier} = {damageAmount} damage");
+        
+        // Apply damage to enemy
+        target.TakeDamage(damageAmount);
     }
     
     private void MoveToPositionForPattern(Vector3 targetPosition)

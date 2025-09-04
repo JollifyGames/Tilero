@@ -114,16 +114,23 @@ public class SlotManager : MonoBehaviour, IManager
             return;
         }
         
+        // WorldManager ile turn kontrolü
+        if (WorldManager.Instance != null && !WorldManager.Instance.CanPlayerAct())
+        {
+            Debug.Log("[SlotManager] Cannot use card - not player turn or player is moving");
+            return;
+        }
+        
         Debug.Log($"[SlotManager] Executing pattern: {pattern.PatternName}");
         
         Vector2Int currentCell = BoardManager.Instance.GetPlayerCell();
         
         // Direction.Up kullanarak rotation olmadan direkt pattern'i uygula
-        // Convert PatternSO to MovementPattern for compatibility
         MovementPattern movementPattern = pattern.ToMovementPattern();
         List<Vector2Int> absoluteSteps = movementPattern.GetAbsoluteSteps(currentCell, Direction.Up);
         
-        PlayerController.Instance.ExecuteMovementPattern(movementPattern, absoluteSteps);
+        // PatternSO'yu direkt gönder, PieceType bilgisi için
+        PlayerController.Instance.ExecuteMovementPattern(pattern, absoluteSteps);
         
         // Refill the used slot
         RefillSlot(slotIndex);

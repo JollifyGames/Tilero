@@ -22,4 +22,4 @@ MonoBehaviour:
   - position: {x: 2, y: 0}
     pieceType: 1
   - position: {x: 3, y: 0}
-    pieceType: 1
+    pieceType: 2

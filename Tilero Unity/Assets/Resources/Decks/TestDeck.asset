@@ -18,8 +18,8 @@ MonoBehaviour:
   - pattern: {fileID: 11400000, guid: 657ce11ca2b9d72458bb8f3df447aa83, type: 2}
     count: 3
   - pattern: {fileID: 11400000, guid: 94c1ff74c97c09d4aa59b3afb69deb6b, type: 2}
-    count: 3
+    count: 0
   - pattern: {fileID: 11400000, guid: 5df0c1912fd824e4686c4f67ab620b89, type: 2}
     count: 3
   - pattern: {fileID: 11400000, guid: 8152d13f6bc69374cb7952af1f4e3139, type: 2}
-    count: 3
+    count: 0

@@ -277,7 +277,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 1
   m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
-  m_Color: {r: 0.13968495, g: 0.6886792, b: 0.38723528, a: 1}
+  m_Color: {r: 0.6901961, g: 0.14117646, b: 0.19887328, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -380,10 +380,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3571460677560860500}
-  - component: {fileID: 6239971798917249619}
-  - component: {fileID: 56449761735818843}
+  - component: {fileID: -4600089717578244635}
+  - component: {fileID: 6265096084363120964}
   m_Layer: 0
-  m_Name: Player
+  m_Name: Enemy
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -405,7 +405,7 @@ Transform:
   - {fileID: 8384115554157795350}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &6239971798917249619
+--- !u!114 &-4600089717578244635
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -414,12 +414,25 @@ MonoBehaviour:
   m_GameObject: {fileID: 8885412417579424665}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c2c847514d05a4f47aa16ddf96e39ace, type: 3}
+  m_Script: {fileID: 11500000, guid: 727f465fd055f174d9350e425bb1d548, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  characterStats: {fileID: 11400000, guid: a529b8f21de693d498891511642b6fae, type: 2}
+--- !u!114 &6265096084363120964
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8885412417579424665}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2404e66ef055a12439752685d649f8fd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  movementRange: 1
   moveAnimationDuration: 0.3
-  jumpHeightX: 0.5
-  jumpHeightY: 0.75
+  jumpHeight: 0.5
   jumpCurve:
     serializedVersion: 2
     m_Curve:
@@ -446,16 +459,3 @@ MonoBehaviour:
     m_RotationOrder: 4
   visualTransform: {fileID: 8384115554157795350}
   rotationDuration: 0.2
---- !u!114 &56449761735818843
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8885412417579424665}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9dbcf0dfde8a52a4d90f409b765316f4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  characterStats: {fileID: 11400000, guid: 1be86cdfb21f3154e921477ba363add6, type: 2}
