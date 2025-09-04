@@ -8,26 +8,32 @@ public class MovementSlot : MonoBehaviour, IPointerDownHandler, IPointerUpHandle
 {
     [Header("Slot Settings")]
     [SerializeField] private int slotIndex;
-    [SerializeField] private MovementPattern assignedPattern;
+    private PatternSO assignedPattern;
     
     [Header("Visualization Settings")]
-    [SerializeField] private GameObject cellVisualizationPrefab;
     [SerializeField] private Transform visualizationContainer;
     [SerializeField] private float cellDisplaySize = 30f; // Cell'in görsel boyutu (100'e bölünecek)
     [SerializeField] private float cellSpacing = 40f; // Cell'ler arası mesafe (100'e bölünecek)
     [SerializeField] private bool autoResize = true; // Canvas'a sığmazsa otomatik küçült
     [SerializeField] private float maxCanvasSize = 200f; // Max canvas boyutu (100'e bölünecek = 2.0f)
     
+    [Header("Piece Type Prefabs")]
+    [SerializeField] private GameObject playerPrefab;
+    [SerializeField] private GameObject basicPrefab;
+    [SerializeField] private GameObject attackPrefab;
+    [SerializeField] private GameObject defensePrefab;
+    [SerializeField] private GameObject specialPrefab;
+    
     [Header("Hold Settings")]
     [SerializeField] private float holdThreshold = 0.5f;
     
-    public event Action<int, MovementPattern> OnSlotClicked;
-    public event Action<int, MovementPattern> OnSlotPressed;
-    public event Action<int, MovementPattern> OnSlotReleased;
-    public event Action<int, MovementPattern> OnSlotHeld;
+    public event Action<int, PatternSO> OnSlotClicked;
+    public event Action<int, PatternSO> OnSlotPressed;
+    public event Action<int, PatternSO> OnSlotReleased;
+    public event Action<int, PatternSO> OnSlotHeld;
     
     public int SlotIndex => slotIndex;
-    public MovementPattern AssignedPattern => assignedPattern;
+    public PatternSO AssignedPattern => assignedPattern;
     
     private bool isPressed = false;
     private float pressTime = 0f;
@@ -45,7 +51,7 @@ public class MovementSlot : MonoBehaviour, IPointerDownHandler, IPointerUpHandle
         }
     }
     
-    public void AssignPattern(MovementPattern pattern)
+    public void AssignPattern(PatternSO pattern)
     {
         assignedPattern = pattern;
         Debug.Log($"[MovementSlot {slotIndex}] Pattern assigned: {pattern?.PatternName}");
@@ -62,12 +68,6 @@ public class MovementSlot : MonoBehaviour, IPointerDownHandler, IPointerUpHandle
             return;
         }
         
-        if (cellVisualizationPrefab == null)
-        {
-            Debug.LogError($"[MovementSlot {slotIndex}] Cell Visualization Prefab is not assigned!");
-            return;
-        }
-        
         Debug.Log($"[MovementSlot {slotIndex}] Creating visualization for pattern: {assignedPattern.PatternName} with {assignedPattern.Steps.Count} steps");
         
         // Resize faktörünü hesapla (gerekirse)
@@ -76,13 +76,10 @@ public class MovementSlot : MonoBehaviour, IPointerDownHandler, IPointerUpHandle
         // Pattern'in merkez offset'ini hesapla
         Vector2 centerOffset = CalculatePatternCenterOffset(scaleFactor);
         
-        // Player pozisyonunu (0,0) olarak göster
-        CreateVisualizationCell(Vector2Int.zero, true, centerOffset, scaleFactor);
-        
-        // Pattern step'lerini göster
+        // Pattern step'lerini göster (pieceType ile birlikte)
         foreach (var step in assignedPattern.Steps)
         {
-            CreateVisualizationCell(step, false, centerOffset, scaleFactor);
+            CreateVisualizationCell(step, centerOffset, scaleFactor);
         }
     }
     
@@ -99,10 +96,10 @@ public class MovementSlot : MonoBehaviour, IPointerDownHandler, IPointerUpHandle
         
         foreach (var step in assignedPattern.Steps)
         {
-            minX = Mathf.Min(minX, step.x);
-            maxX = Mathf.Max(maxX, step.x);
-            minY = Mathf.Min(minY, step.y);
-            maxY = Mathf.Max(maxY, step.y);
+            minX = Mathf.Min(minX, step.position.x);
+            maxX = Mathf.Max(maxX, step.position.x);
+            minY = Mathf.Min(minY, step.position.y);
+            maxY = Mathf.Max(maxY, step.position.y);
         }
         
         float patternWidth = (maxX - minX + 1) * cellSpacing;
@@ -129,10 +126,10 @@ public class MovementSlot : MonoBehaviour, IPointerDownHandler, IPointerUpHandle
         
         foreach (var step in assignedPattern.Steps)
         {
-            minX = Mathf.Min(minX, step.x);
-            maxX = Mathf.Max(maxX, step.x);
-            minY = Mathf.Min(minY, step.y);
-            maxY = Mathf.Max(maxY, step.y);
+            minX = Mathf.Min(minX, step.position.x);
+            maxX = Mathf.Max(maxX, step.position.x);
+            minY = Mathf.Min(minY, step.position.y);
+            maxY = Mathf.Max(maxY, step.position.y);
         }
         
         // Pattern'in merkezini hesapla
@@ -143,16 +140,23 @@ public class MovementSlot : MonoBehaviour, IPointerDownHandler, IPointerUpHandle
         return new Vector2(-centerX * cellSpacing * scaleFactor, -centerY * cellSpacing * scaleFactor);
     }
     
-    private void CreateVisualizationCell(Vector2Int gridPos, bool isPlayerStart, Vector2 centerOffset, float scaleFactor)
+    private void CreateVisualizationCell(PatternSO.PatternStep step, Vector2 centerOffset, float scaleFactor)
     {
-        GameObject cell = Instantiate(cellVisualizationPrefab, visualizationContainer);
+        GameObject prefab = GetPrefabForPieceType(step.pieceType);
+        if (prefab == null)
+        {
+            Debug.LogWarning($"[MovementSlot {slotIndex}] No prefab assigned for PieceType: {step.pieceType}");
+            return;
+        }
+        
+        GameObject cell = Instantiate(prefab, visualizationContainer);
         
         // World Space Canvas için direkt transform kullan
         if (cell != null)
         {
             // 0,0 merkez olacak şekilde hesapla ve 100'e böl
-            float xPos = ((gridPos.x * cellSpacing * scaleFactor) + centerOffset.x) / 100f;
-            float yPos = ((gridPos.y * cellSpacing * scaleFactor) + centerOffset.y) / 100f;
+            float xPos = ((step.position.x * cellSpacing * scaleFactor) + centerOffset.x) / 100f;
+            float yPos = ((step.position.y * cellSpacing * scaleFactor) + centerOffset.y) / 100f;
             
             cell.transform.localPosition = new Vector3(xPos, yPos, 0);
             
@@ -163,19 +167,28 @@ public class MovementSlot : MonoBehaviour, IPointerDownHandler, IPointerUpHandle
                 float finalCellSize = cellDisplaySize * scaleFactor;
                 rectTransform.sizeDelta = Vector2.one * (finalCellSize / 100f);
             }
-            
-            // Player başlangıç hücresini farklı renklendir
-            if (isPlayerStart)
-            {
-                var image = cell.GetComponent<UnityEngine.UI.Image>();
-                if (image != null)
-                {
-                    image.color = new Color(0.2f, 0.8f, 0.2f, 0.8f); // Yeşilimsi
-                }
-            }
         }
         
         visualizationCells.Add(cell);
+    }
+    
+    private GameObject GetPrefabForPieceType(PieceType pieceType)
+    {
+        switch (pieceType)
+        {
+            case PieceType.Player:
+                return playerPrefab;
+            case PieceType.Basic:
+                return basicPrefab;
+            case PieceType.Attack:
+                return attackPrefab;
+            case PieceType.Defense:
+                return defensePrefab;
+            case PieceType.Special:
+                return specialPrefab;
+            default:
+                return basicPrefab;
+        }
     }
     
     private void ClearVisualization()

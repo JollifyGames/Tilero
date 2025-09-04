@@ -9,8 +9,11 @@ public class SlotManager : MonoBehaviour, IManager
     [Header("Slot Configuration")]
     [SerializeField] private MovementSlot[] movementSlots = new MovementSlot[3];
     
-    [Header("Test Patterns")]
-    [SerializeField] private List<MovementPattern> testPatterns = new List<MovementPattern>();
+    [Header("Deck Configuration")]
+    [SerializeField] private DeckSO deckSO;
+    
+    private DeckService deckService;
+    private PatternSO[] currentPatterns = new PatternSO[3];
     
     private void Awake()
     {
@@ -21,14 +24,27 @@ public class SlotManager : MonoBehaviour, IManager
         }
         
         Instance = this;
-        SetupTestPatterns();
     }
     
     public IEnumerator Initialize()
     {
+        InitializeDeckService();
         InitializeSlots();
-        AssignTestPatterns();
+        DrawInitialCards();
         yield return null;
+    }
+    
+    private void InitializeDeckService()
+    {
+        if (deckSO != null)
+        {
+            deckService = new DeckService(deckSO);
+            Debug.Log("[SlotManager] Deck service initialized");
+        }
+        else
+        {
+            Debug.LogError("[SlotManager] No deck assigned!");
+        }
     }
     
     private void InitializeSlots()
@@ -45,49 +61,49 @@ public class SlotManager : MonoBehaviour, IManager
         Debug.Log($"[SlotManager] Initialized {movementSlots.Length} slots");
     }
     
-    private void SetupTestPatterns()
+    private void DrawInitialCards()
     {
-        if (testPatterns.Count == 0)
-        {
-            MovementPattern pattern1 = new MovementPattern("Forward Rush");
-            pattern1.Steps.Add(new Vector2Int(0, 1));
-            pattern1.Steps.Add(new Vector2Int(0, 2));
-            pattern1.Steps.Add(new Vector2Int(0, 3));
-            testPatterns.Add(pattern1);
-            
-            MovementPattern pattern2 = new MovementPattern("L-Shape");
-            pattern2.Steps.Add(new Vector2Int(1, 0));
-            pattern2.Steps.Add(new Vector2Int(2, 0));
-            pattern2.Steps.Add(new Vector2Int(2, 1));
-            testPatterns.Add(pattern2);
-            
-            MovementPattern pattern3 = new MovementPattern("Diagonal");
-            pattern3.Steps.Add(new Vector2Int(1, 0));
-            pattern3.Steps.Add(new Vector2Int(1, 1));
-            pattern3.Steps.Add(new Vector2Int(2, 1));
-            testPatterns.Add(pattern3);
-        }
-    }
-    
-    private void AssignTestPatterns()
-    {
-        Debug.Log($"[SlotManager] Assigning {testPatterns.Count} patterns to {movementSlots.Length} slots");
+        if (deckService == null) return;
         
-        for (int i = 0; i < movementSlots.Length && i < testPatterns.Count; i++)
+        for (int i = 0; i < movementSlots.Length; i++)
         {
-            if (movementSlots[i] != null && testPatterns[i] != null)
-            {
-                movementSlots[i].AssignPattern(testPatterns[i]);
-                Debug.Log($"[SlotManager] Assigned pattern '{testPatterns[i].PatternName}' to slot {i}");
-            }
-            else
-            {
-                Debug.LogWarning($"[SlotManager] Slot {i} or pattern {i} is null");
-            }
+            DrawCardToSlot(i);
         }
     }
     
-    private void OnSlotClicked(int slotIndex, MovementPattern pattern)
+    private void DrawCardToSlot(int slotIndex)
+    {
+        if (deckService == null || slotIndex >= movementSlots.Length) return;
+        
+        PatternSO drawnCard = deckService.DrawCard();
+        if (drawnCard != null && movementSlots[slotIndex] != null)
+        {
+            currentPatterns[slotIndex] = drawnCard;
+            movementSlots[slotIndex].AssignPattern(drawnCard);
+            Debug.Log($"[SlotManager] Drew {drawnCard.PatternName} to slot {slotIndex}");
+        }
+    }
+    
+    public void RefillSlot(int slotIndex)
+    {
+        // Used slot'u discard et ve yeni kart çek
+        if (currentPatterns[slotIndex] != null && deckService != null)
+        {
+            deckService.DiscardCard(currentPatterns[slotIndex]);
+            currentPatterns[slotIndex] = null;
+            
+            // Clear the slot visualization
+            if (movementSlots[slotIndex] != null)
+            {
+                movementSlots[slotIndex].AssignPattern(null);
+            }
+            
+            // Draw new card
+            DrawCardToSlot(slotIndex);
+        }
+    }
+    
+    private void OnSlotClicked(int slotIndex, PatternSO pattern)
     {
         if (BoardManager.Instance == null || PlayerController.Instance == null)
         {
@@ -100,12 +116,17 @@ public class SlotManager : MonoBehaviour, IManager
         Vector2Int currentCell = BoardManager.Instance.GetPlayerCell();
         
         // Direction.Up kullanarak rotation olmadan direkt pattern'i uygula
-        List<Vector2Int> absoluteSteps = pattern.GetAbsoluteSteps(currentCell, Direction.Up);
+        // Convert PatternSO to MovementPattern for compatibility
+        MovementPattern movementPattern = pattern.ToMovementPattern();
+        List<Vector2Int> absoluteSteps = movementPattern.GetAbsoluteSteps(currentCell, Direction.Up);
         
-        PlayerController.Instance.ExecuteMovementPattern(pattern, absoluteSteps);
+        PlayerController.Instance.ExecuteMovementPattern(movementPattern, absoluteSteps);
+        
+        // Refill the used slot
+        RefillSlot(slotIndex);
     }
     
-    public void AssignPatternToSlot(int slotIndex, MovementPattern pattern)
+    public void AssignPatternToSlot(int slotIndex, PatternSO pattern)
     {
         if (slotIndex >= 0 && slotIndex < movementSlots.Length && movementSlots[slotIndex] != null)
         {

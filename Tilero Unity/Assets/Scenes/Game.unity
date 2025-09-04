@@ -170,24 +170,7 @@ MonoBehaviour:
   - {fileID: 1358851251}
   - {fileID: 1147827652}
   - {fileID: 685225405}
-  testPatterns:
-  - patternName: 
-    steps:
-    - {x: 0, y: 0}
-    - {x: 1, y: 0}
-    - {x: 2, y: 0}
-    - {x: 2, y: 1}
-  - patternName: 
-    steps:
-    - {x: 0, y: 0}
-    - {x: 1, y: 0}
-    - {x: 2, y: 0}
-  - patternName: 
-    steps:
-    - {x: 0, y: 0}
-    - {x: 1, y: 0}
-    - {x: 2, y: 0}
-    - {x: 3, y: 0}
+  deckSO: {fileID: 11400000, guid: 357a02e104fcd2d40b48db3f1656f36b, type: 2}
 --- !u!1 &203528151
 GameObject:
   m_ObjectHideFlags: 0
@@ -588,20 +571,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   slotIndex: 2
-  assignedPattern:
-    patternName: 
-    steps:
-    - {x: 0, y: 0}
-    - {x: 1, y: 0}
-    - {x: 2, y: 0}
-    - {x: 2, y: 1}
-    - {x: 3, y: 1}
-  cellVisualizationPrefab: {fileID: 5794004954996160524, guid: 34f89c88551e6a64c93fb2bdd610d764, type: 3}
   visualizationContainer: {fileID: 207941569}
   cellDisplaySize: 50
   cellSpacing: 60
   autoResize: 1
   maxCanvasSize: 200
+  playerPrefab: {fileID: 5794004954996160524, guid: e8df8f10aa6785d4dbedaf716392ed3c, type: 3}
+  basicPrefab: {fileID: 5794004954996160524, guid: 34f89c88551e6a64c93fb2bdd610d764, type: 3}
+  attackPrefab: {fileID: 5794004954996160524, guid: 183a36dee0f9b1741a190c6653d58a25, type: 3}
+  defensePrefab: {fileID: 5794004954996160524, guid: 0c6c06dc102fd92498183b6d5d39e8ea, type: 3}
+  specialPrefab: {fileID: 5794004954996160524, guid: d48cb5118ebb7e240a9781f64ace9e3f, type: 3}
   holdThreshold: 0.5
 --- !u!61 &685225406
 BoxCollider2D:
@@ -1005,20 +984,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   slotIndex: 1
-  assignedPattern:
-    patternName: 
-    steps:
-    - {x: 0, y: 0}
-    - {x: 1, y: 0}
-    - {x: 2, y: 0}
-    - {x: 2, y: 1}
-    - {x: 3, y: 1}
-  cellVisualizationPrefab: {fileID: 5794004954996160524, guid: 34f89c88551e6a64c93fb2bdd610d764, type: 3}
   visualizationContainer: {fileID: 1671524836}
   cellDisplaySize: 50
   cellSpacing: 60
   autoResize: 1
   maxCanvasSize: 200
+  playerPrefab: {fileID: 5794004954996160524, guid: e8df8f10aa6785d4dbedaf716392ed3c, type: 3}
+  basicPrefab: {fileID: 5794004954996160524, guid: 34f89c88551e6a64c93fb2bdd610d764, type: 3}
+  attackPrefab: {fileID: 5794004954996160524, guid: 183a36dee0f9b1741a190c6653d58a25, type: 3}
+  defensePrefab: {fileID: 5794004954996160524, guid: 0c6c06dc102fd92498183b6d5d39e8ea, type: 3}
+  specialPrefab: {fileID: 5794004954996160524, guid: d48cb5118ebb7e240a9781f64ace9e3f, type: 3}
   holdThreshold: 0.5
 --- !u!61 &1147827653
 BoxCollider2D:
@@ -1148,20 +1123,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   slotIndex: 0
-  assignedPattern:
-    patternName: 
-    steps:
-    - {x: 0, y: 0}
-    - {x: 1, y: 0}
-    - {x: 2, y: 0}
-    - {x: 2, y: 1}
-    - {x: 3, y: 1}
-  cellVisualizationPrefab: {fileID: 5794004954996160524, guid: 34f89c88551e6a64c93fb2bdd610d764, type: 3}
   visualizationContainer: {fileID: 920639250}
   cellDisplaySize: 50
   cellSpacing: 60
   autoResize: 1
   maxCanvasSize: 200
+  playerPrefab: {fileID: 5794004954996160524, guid: e8df8f10aa6785d4dbedaf716392ed3c, type: 3}
+  basicPrefab: {fileID: 5794004954996160524, guid: 34f89c88551e6a64c93fb2bdd610d764, type: 3}
+  attackPrefab: {fileID: 5794004954996160524, guid: 183a36dee0f9b1741a190c6653d58a25, type: 3}
+  defensePrefab: {fileID: 5794004954996160524, guid: 0c6c06dc102fd92498183b6d5d39e8ea, type: 3}
+  specialPrefab: {fileID: 5794004954996160524, guid: d48cb5118ebb7e240a9781f64ace9e3f, type: 3}
   holdThreshold: 0.5
 --- !u!61 &1358851252
 BoxCollider2D:
