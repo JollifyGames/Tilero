@@ -10,8 +10,8 @@ public class PlayerCharacter : MonoBehaviour
     [SerializeField] private float basicMultiplier = 1f;
     [Tooltip("Attack piece type damage multiplier")] 
     [SerializeField] private float attackMultiplier = 2f;
-    [Tooltip("Special piece type damage multiplier")]
-    [SerializeField] private float specialMultiplier = 3f;
+    [Tooltip("Special piece type damage multiplier (also applies knockback)")]
+    [SerializeField] private float specialMultiplier = 2f;
     
     [Header("Defense Buff")]
     [Tooltip("Defense bonus when standing on Defense piece type")]

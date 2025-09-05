@@ -313,6 +313,13 @@ public class PlayerController : MonoBehaviour
         
         // Apply damage to enemy
         target.TakeDamage(damageAmount);
+        
+        // Apply knockback if Special attack
+        if (pieceType == PieceType.Special)
+        {
+            Debug.Log($"[PlayerController] Special attack - Applying knockback!");
+            StartCoroutine(target.ApplyKnockback(currentDirection));
+        }
     }
     
     private void MoveToPositionForPattern(Vector3 targetPosition)
