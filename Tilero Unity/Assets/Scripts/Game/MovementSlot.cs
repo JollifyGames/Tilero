@@ -11,6 +11,7 @@ public class MovementSlot : MonoBehaviour, IPointerDownHandler, IPointerUpHandle
     [Header("Slot Settings")]
     [SerializeField] private int slotIndex;
     private PatternSO assignedPattern;
+    private int currentRotation = 0; // 0, 90, 180, 270 degrees
     
     [Header("Visualization Settings")]
     [SerializeField] private Transform visualizationContainer;
@@ -22,6 +23,7 @@ public class MovementSlot : MonoBehaviour, IPointerDownHandler, IPointerUpHandle
     [Header("UI Elements")]
     [SerializeField] private TextMeshProUGUI costText;
     [SerializeField] private Image slotBackground;
+    [SerializeField] private Button rotateButton;
     
     [Header("Piece Type Prefabs")]
     [SerializeField] private GameObject playerPrefab;
@@ -40,6 +42,7 @@ public class MovementSlot : MonoBehaviour, IPointerDownHandler, IPointerUpHandle
     
     public int SlotIndex => slotIndex;
     public PatternSO AssignedPattern => assignedPattern;
+    public int GetCurrentRotation() => currentRotation;
     
     private bool isPressed = false;
     private float pressTime = 0f;
@@ -55,15 +58,23 @@ public class MovementSlot : MonoBehaviour, IPointerDownHandler, IPointerUpHandle
         {
             visualizationContainer = transform;
         }
+        
+        // Setup rotate button
+        if (rotateButton != null)
+        {
+            rotateButton.onClick.AddListener(OnRotateButtonClicked);
+        }
     }
     
     public void AssignPattern(PatternSO pattern)
     {
         assignedPattern = pattern;
+        currentRotation = 0; // Reset rotation when new pattern is assigned
         Debug.Log($"[MovementSlot {slotIndex}] Pattern assigned: {pattern?.PatternName}");
         UpdatePatternVisualization();
         UpdateCostDisplay();
         UpdateSlotAvailability();
+        UpdateRotateButtonVisibility();
     }
     
     private void UpdatePatternVisualization()
@@ -76,33 +87,68 @@ public class MovementSlot : MonoBehaviour, IPointerDownHandler, IPointerUpHandle
             return;
         }
         
-        Debug.Log($"[MovementSlot {slotIndex}] Creating visualization for pattern: {assignedPattern.PatternName} with {assignedPattern.Steps.Count} steps");
+        Debug.Log($"[MovementSlot {slotIndex}] Creating visualization for pattern: {assignedPattern.PatternName} with rotation: {currentRotation}°");
+        
+        // Get rotated steps
+        List<PatternSO.PatternStep> rotatedSteps = GetRotatedSteps();
         
         // Resize faktörünü hesapla (gerekirse)
-        float scaleFactor = CalculateScaleFactor();
+        float scaleFactor = CalculateScaleFactor(rotatedSteps);
         
         // Pattern'in merkez offset'ini hesapla
-        Vector2 centerOffset = CalculatePatternCenterOffset(scaleFactor);
+        Vector2 centerOffset = CalculatePatternCenterOffset(rotatedSteps, scaleFactor);
         
         // Pattern step'lerini göster (pieceType ile birlikte)
-        foreach (var step in assignedPattern.Steps)
+        foreach (var step in rotatedSteps)
         {
             CreateVisualizationCell(step, centerOffset, scaleFactor);
         }
     }
     
-    private float CalculateScaleFactor()
+    private List<PatternSO.PatternStep> GetRotatedSteps()
+    {
+        if (assignedPattern == null) return new List<PatternSO.PatternStep>();
+        
+        List<PatternSO.PatternStep> rotatedSteps = new List<PatternSO.PatternStep>();
+        
+        foreach (var step in assignedPattern.Steps)
+        {
+            Vector2Int rotatedPos = RotateVector(step.position, currentRotation);
+            rotatedSteps.Add(new PatternSO.PatternStep(rotatedPos, step.pieceType));
+        }
+        
+        return rotatedSteps;
+    }
+    
+    private Vector2Int RotateVector(Vector2Int pos, int angle)
+    {
+        switch (angle)
+        {
+            case 0:
+                return pos;
+            case 90:
+                return new Vector2Int(-pos.y, pos.x);
+            case 180:
+                return new Vector2Int(-pos.x, -pos.y);
+            case 270:
+                return new Vector2Int(pos.y, -pos.x);
+            default:
+                return pos;
+        }
+    }
+    
+    private float CalculateScaleFactor(List<PatternSO.PatternStep> steps)
     {
         if (!autoResize) return 1f;
         
-        if (assignedPattern == null || assignedPattern.Steps.Count == 0)
+        if (steps == null || steps.Count == 0)
             return 1f;
         
         // Pattern'in boyutlarını bul
         int minX = 0, maxX = 0;
         int minY = 0, maxY = 0;
         
-        foreach (var step in assignedPattern.Steps)
+        foreach (var step in steps)
         {
             minX = Mathf.Min(minX, step.position.x);
             maxX = Mathf.Max(maxX, step.position.x);
@@ -123,16 +169,16 @@ public class MovementSlot : MonoBehaviour, IPointerDownHandler, IPointerUpHandle
         return Mathf.Min(scaleX, scaleY);
     }
     
-    private Vector2 CalculatePatternCenterOffset(float scaleFactor)
+    private Vector2 CalculatePatternCenterOffset(List<PatternSO.PatternStep> steps, float scaleFactor)
     {
-        if (assignedPattern == null || assignedPattern.Steps.Count == 0)
+        if (steps == null || steps.Count == 0)
             return Vector2.zero;
         
         // Pattern'in min ve max değerlerini bul
         int minX = 0, maxX = 0;
         int minY = 0, maxY = 0;
         
-        foreach (var step in assignedPattern.Steps)
+        foreach (var step in steps)
         {
             minX = Mathf.Min(minX, step.position.x);
             maxX = Mathf.Max(maxX, step.position.x);
@@ -357,11 +403,38 @@ public class MovementSlot : MonoBehaviour, IPointerDownHandler, IPointerUpHandle
         }
     }
     
+    private void OnRotateButtonClicked()
+    {
+        if (assignedPattern == null) return;
+        
+        // Rotate 90 degrees clockwise
+        currentRotation = (currentRotation + 90) % 360;
+        
+        Debug.Log($"[MovementSlot {slotIndex}] Rotated pattern to {currentRotation}°");
+        
+        // Update visualization with new rotation
+        UpdatePatternVisualization();
+    }
+    
+    private void UpdateRotateButtonVisibility()
+    {
+        if (rotateButton != null)
+        {
+            // Rotate button sadece pattern varsa görünsün
+            rotateButton.gameObject.SetActive(assignedPattern != null);
+        }
+    }
+    
     private void OnDestroy()
     {
         if (holdCheckCoroutine != null)
         {
             StopCoroutine(holdCheckCoroutine);
+        }
+        
+        if (rotateButton != null)
+        {
+            rotateButton.onClick.RemoveListener(OnRotateButtonClicked);
         }
         
         ClearVisualization();

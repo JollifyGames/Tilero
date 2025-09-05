@@ -158,11 +158,23 @@ public class SlotManager : MonoBehaviour, IManager
         
         Debug.Log($"[SlotManager] Executing pattern: {pattern.PatternName} (Cost: {pattern.Cost})");
         
+        // Get rotation from slot
+        int rotation = 0;
+        if (movementSlots[slotIndex] != null)
+        {
+            rotation = movementSlots[slotIndex].GetCurrentRotation();
+            Debug.Log($"[SlotManager] Using rotation: {rotation}°");
+        }
+        
         Vector2Int currentCell = BoardManager.Instance.GetPlayerCell();
         
-        // Direction.Up kullanarak rotation olmadan direkt pattern'i uygula
-        MovementPattern movementPattern = pattern.ToMovementPattern();
-        List<Vector2Int> absoluteSteps = movementPattern.GetAbsoluteSteps(currentCell, Direction.Up);
+        // Apply rotation to pattern for execution
+        List<Vector2Int> absoluteSteps = new List<Vector2Int>();
+        foreach (var step in pattern.Steps)
+        {
+            Vector2Int rotatedPos = RotateVector(step.position, rotation);
+            absoluteSteps.Add(currentCell + rotatedPos);
+        }
         
         // PatternSO'yu direkt gönder, PieceType bilgisi için
         PlayerController.Instance.ExecuteMovementPattern(pattern, absoluteSteps);
@@ -184,13 +196,26 @@ public class SlotManager : MonoBehaviour, IManager
     {
         Debug.Log($"[SlotManager] Slot {slotIndex} pressed");
         
-        // Press an\u0131nda hemen preview g\u00f6ster
+        // Press anında hemen preview göster
         if (pattern == null || BoardManager.Instance == null || GridManager.Instance == null)
             return;
         
+        // Get rotation from slot
+        int rotation = 0;
+        if (movementSlots[slotIndex] != null)
+        {
+            rotation = movementSlots[slotIndex].GetCurrentRotation();
+        }
+        
         Vector2Int currentCell = BoardManager.Instance.GetPlayerCell();
-        MovementPattern movementPattern = pattern.ToMovementPattern();
-        List<Vector2Int> previewPositions = movementPattern.GetAbsoluteSteps(currentCell, Direction.Up);
+        
+        // Apply rotation to pattern for preview
+        List<Vector2Int> previewPositions = new List<Vector2Int>();
+        foreach (var step in pattern.Steps)
+        {
+            Vector2Int rotatedPos = RotateVector(step.position, rotation);
+            previewPositions.Add(currentCell + rotatedPos);
+        }
         
         GridManager.Instance.ShowPatternPreview(previewPositions);
     }
@@ -227,6 +252,23 @@ public class SlotManager : MonoBehaviour, IManager
         }
         
         return false; // Hiçbir kart oynanamaz
+    }
+    
+    private Vector2Int RotateVector(Vector2Int pos, int angle)
+    {
+        switch (angle)
+        {
+            case 0:
+                return pos;
+            case 90:
+                return new Vector2Int(-pos.y, pos.x);
+            case 180:
+                return new Vector2Int(-pos.x, -pos.y);
+            case 270:
+                return new Vector2Int(pos.y, -pos.x);
+            default:
+                return pos;
+        }
     }
     
     private void OnDestroy()
