@@ -59,4 +59,5 @@ public class RotatedPatternSO : PatternSO
     
     public override string PatternName => $"{originalPattern?.PatternName ?? "Unknown"} ({rotationAngle}°)";
     public override string Description => originalPattern?.Description ?? "";
+    public override int Cost => originalPattern?.Cost ?? 2;
 }

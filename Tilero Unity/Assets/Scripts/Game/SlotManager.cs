@@ -89,7 +89,7 @@ public class SlotManager : MonoBehaviour, IManager
     
     public void RefillSlot(int slotIndex)
     {
-        // Used slot'u discard et ve yeni kart çek
+        // Used slot'u discard et, AMA YENİ KART ÇEKME
         if (currentPatterns[slotIndex] != null && deckService != null)
         {
             deckService.DiscardCard(currentPatterns[slotIndex]);
@@ -101,8 +101,26 @@ public class SlotManager : MonoBehaviour, IManager
                 movementSlots[slotIndex].AssignPattern(null);
             }
             
-            // Draw new card
-            DrawCardToSlot(slotIndex);
+            // Artık burada yeni kart çekmiyor, slot boş kalıyor
+        }
+    }
+    
+    public void RefreshAllSlots()
+    {
+        Debug.Log("[SlotManager] Refreshing all slots for new turn");
+        
+        // Tüm slotları temizle ve yeniden doldur
+        for (int i = 0; i < movementSlots.Length; i++)
+        {
+            // Eğer slot'ta kart varsa discard et
+            if (currentPatterns[i] != null && deckService != null)
+            {
+                deckService.DiscardCard(currentPatterns[i]);
+                currentPatterns[i] = null;
+            }
+            
+            // Yeni kart çek
+            DrawCardToSlot(i);
         }
     }
     
@@ -121,7 +139,24 @@ public class SlotManager : MonoBehaviour, IManager
             return;
         }
         
-        Debug.Log($"[SlotManager] Executing pattern: {pattern.PatternName}");
+        // Energy kontrolü
+        if (WorldManager.Instance != null)
+        {
+            int cost = pattern.Cost;
+            if (!WorldManager.Instance.HasEnoughEnergy(cost))
+            {
+                Debug.Log($"[SlotManager] Not enough energy! Pattern costs {cost}, have {WorldManager.Instance.CurrentPlayerEnergy}");
+                return;
+            }
+            
+            // Energy'yi harca
+            if (!WorldManager.Instance.SpendEnergy(cost))
+            {
+                return;
+            }
+        }
+        
+        Debug.Log($"[SlotManager] Executing pattern: {pattern.PatternName} (Cost: {pattern.Cost})");
         
         Vector2Int currentCell = BoardManager.Instance.GetPlayerCell();
         
@@ -132,7 +167,7 @@ public class SlotManager : MonoBehaviour, IManager
         // PatternSO'yu direkt gönder, PieceType bilgisi için
         PlayerController.Instance.ExecuteMovementPattern(pattern, absoluteSteps);
         
-        // Refill the used slot
+        // Sadece slot'u temizle, yeni kart çekme
         RefillSlot(slotIndex);
     }
     
@@ -174,6 +209,24 @@ public class SlotManager : MonoBehaviour, IManager
         {
             GridManager.Instance.ClearPatternPreview();
         }
+    }
+    
+    public bool CanPlayAnyCard()
+    {
+        if (WorldManager.Instance == null) return false;
+        
+        int currentEnergy = WorldManager.Instance.CurrentPlayerEnergy;
+        
+        // Tüm slotları kontrol et
+        for (int i = 0; i < currentPatterns.Length; i++)
+        {
+            if (currentPatterns[i] != null && currentPatterns[i].Cost <= currentEnergy)
+            {
+                return true; // En az bir kart oynanabilir
+            }
+        }
+        
+        return false; // Hiçbir kart oynanamaz
     }
     
     private void OnDestroy()

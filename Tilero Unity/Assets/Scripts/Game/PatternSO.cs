@@ -9,11 +9,15 @@ public class PatternSO : ScriptableObject
     [TextArea(2, 4)]
     [SerializeField] private string description;
     
+    [Header("Pattern Cost")]
+    [SerializeField] private int cost = 2;
+    
     [Header("Pattern Steps")]
     [SerializeField] private List<PatternStep> steps = new List<PatternStep>();
     
     public virtual string PatternName => patternName;
     public virtual string Description => description;
+    public virtual int Cost => cost;
     public virtual List<PatternStep> Steps => steps;
     
     [System.Serializable]

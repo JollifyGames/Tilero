@@ -8,6 +8,7 @@ ScriptedImporter:
   assetBundleName: 
   assetBundleVariant: 
   script: {fileID: 11500000, guid: 62a9f0aa5b59740cfbadc7e5f9823bb0, type: 3}
+  importerVersion: 2
   textureImporterSettings:
     alphaSource: 1
     mipMapMode: 0
@@ -764,13 +765,18 @@ ScriptedImporter:
   spriteSheetImportData: []
   asepriteLayers:
   - layerIndex: 0
-    guid: -714149560
+    uuid:
+      value0: 831230056
+      value1: 0
+      value2: 0
+      value3: 0
+    guid: 831230056
     name: Bushes
     layerFlags: 0
     layerType: 0
     blendMode: 0
     cells:
-    - name: Bushes_Frame_0
+    - name: Frame_0
       frameIndex: 0
       additiveSortOrder: 0
       cellRect:
@@ -779,7 +785,7 @@ ScriptedImporter:
         width: 67
         height: 46
       spriteId: cd4bfd14173de2d4499c2536d6436b51
-    - name: Bushes_Frame_1
+    - name: Frame_1
       frameIndex: 1
       additiveSortOrder: 0
       cellRect:
@@ -788,7 +794,7 @@ ScriptedImporter:
         width: 67
         height: 46
       spriteId: a1f1b8596076f374f818997edbb6cb23
-    - name: Bushes_Frame_2
+    - name: Frame_2
       frameIndex: 2
       additiveSortOrder: 0
       cellRect:
@@ -797,7 +803,7 @@ ScriptedImporter:
         width: 67
         height: 46
       spriteId: 7f858dfbbda276c478d6a95bd3d1ff70
-    - name: Bushes_Frame_3
+    - name: Frame_3
       frameIndex: 3
       additiveSortOrder: 0
       cellRect:
@@ -806,7 +812,7 @@ ScriptedImporter:
         width: 67
         height: 46
       spriteId: f8b079308cefd2a48a1b84a840bcba0a
-    - name: Bushes_Frame_4
+    - name: Frame_4
       frameIndex: 4
       additiveSortOrder: 0
       cellRect:
@@ -815,7 +821,7 @@ ScriptedImporter:
         width: 67
         height: 46
       spriteId: dcc00ac2a834e5f40b135680ad8d18a8
-    - name: Bushes_Frame_5
+    - name: Frame_5
       frameIndex: 5
       additiveSortOrder: 0
       cellRect:
@@ -824,7 +830,7 @@ ScriptedImporter:
         width: 67
         height: 46
       spriteId: f32185e41baec2a4988dd3fbc302c5bc
-    - name: Bushes_Frame_6
+    - name: Frame_6
       frameIndex: 6
       additiveSortOrder: 0
       cellRect:
@@ -833,7 +839,7 @@ ScriptedImporter:
         width: 67
         height: 46
       spriteId: 9ee0499665a256042876d82f6392b49d
-    - name: Bushes_Frame_7
+    - name: Frame_7
       frameIndex: 7
       additiveSortOrder: 0
       cellRect:
@@ -842,7 +848,7 @@ ScriptedImporter:
         width: 67
         height: 46
       spriteId: 893b1a8680a3ba54ea8d1f8c31a3e37d
-    - name: Bushes_Frame_8
+    - name: Frame_8
       frameIndex: 8
       additiveSortOrder: 0
       cellRect:
@@ -851,7 +857,7 @@ ScriptedImporter:
         width: 46
         height: 34
       spriteId: 3c8ed27d5aab42444868dcc01852c530
-    - name: Bushes_Frame_9
+    - name: Frame_9
       frameIndex: 9
       additiveSortOrder: 0
       cellRect:
@@ -860,7 +866,7 @@ ScriptedImporter:
         width: 46
         height: 34
       spriteId: 3bb563d5ebbecd1478253ccce3f1dfc2
-    - name: Bushes_Frame_10
+    - name: Frame_10
       frameIndex: 10
       additiveSortOrder: 0
       cellRect:
@@ -869,7 +875,7 @@ ScriptedImporter:
         width: 46
         height: 34
       spriteId: 28012f286933aca4098bc42e5a957786
-    - name: Bushes_Frame_11
+    - name: Frame_11
       frameIndex: 11
       additiveSortOrder: 0
       cellRect:
@@ -878,7 +884,7 @@ ScriptedImporter:
         width: 46
         height: 34
       spriteId: 836022fe0c7e3434d8277c9e2c974d16
-    - name: Bushes_Frame_12
+    - name: Frame_12
       frameIndex: 12
       additiveSortOrder: 0
       cellRect:
@@ -887,7 +893,7 @@ ScriptedImporter:
         width: 46
         height: 34
       spriteId: 7262bf49d52762a4da8c3b2ccfbbc370
-    - name: Bushes_Frame_13
+    - name: Frame_13
       frameIndex: 13
       additiveSortOrder: 0
       cellRect:
@@ -896,7 +902,7 @@ ScriptedImporter:
         width: 46
         height: 34
       spriteId: a90f76b9b24617b4da5a70b5c7288fd2
-    - name: Bushes_Frame_14
+    - name: Frame_14
       frameIndex: 14
       additiveSortOrder: 0
       cellRect:
@@ -905,7 +911,7 @@ ScriptedImporter:
         width: 46
         height: 34
       spriteId: db76cd361f83fea4ebb76347956e69d2
-    - name: Bushes_Frame_15
+    - name: Frame_15
       frameIndex: 15
       additiveSortOrder: 0
       cellRect:
@@ -914,7 +920,7 @@ ScriptedImporter:
         width: 46
         height: 34
       spriteId: 14f6401b2da46374e83cf4e4260ec347
-    - name: Bushes_Frame_16
+    - name: Frame_16
       frameIndex: 16
       additiveSortOrder: 0
       cellRect:
@@ -923,7 +929,7 @@ ScriptedImporter:
         width: 78
         height: 59
       spriteId: bb6ea4fefcc601449b634b41e4c0c166
-    - name: Bushes_Frame_17
+    - name: Frame_17
       frameIndex: 17
       additiveSortOrder: 0
       cellRect:
@@ -932,7 +938,7 @@ ScriptedImporter:
         width: 78
         height: 59
       spriteId: f72069006c987c44082934d2d6937609
-    - name: Bushes_Frame_18
+    - name: Frame_18
       frameIndex: 18
       additiveSortOrder: 0
       cellRect:
@@ -941,7 +947,7 @@ ScriptedImporter:
         width: 77
         height: 59
       spriteId: ce3115bbbe54d794fbf0712765054f83
-    - name: Bushes_Frame_19
+    - name: Frame_19
       frameIndex: 19
       additiveSortOrder: 0
       cellRect:
@@ -950,7 +956,7 @@ ScriptedImporter:
         width: 78
         height: 59
       spriteId: b49a0743769797349a41adc934e92a67
-    - name: Bushes_Frame_20
+    - name: Frame_20
       frameIndex: 20
       additiveSortOrder: 0
       cellRect:
@@ -959,7 +965,7 @@ ScriptedImporter:
         width: 78
         height: 59
       spriteId: 389245cae59e4d94c9d546f9d4fa4580
-    - name: Bushes_Frame_21
+    - name: Frame_21
       frameIndex: 21
       additiveSortOrder: 0
       cellRect:
@@ -968,7 +974,7 @@ ScriptedImporter:
         width: 79
         height: 59
       spriteId: d73e28ce44932b5469e7744a4e7bce9f
-    - name: Bushes_Frame_22
+    - name: Frame_22
       frameIndex: 22
       additiveSortOrder: 0
       cellRect:
@@ -977,7 +983,7 @@ ScriptedImporter:
         width: 78
         height: 59
       spriteId: 10001137e9f4bf04f88004442bd447f0
-    - name: Bushes_Frame_23
+    - name: Frame_23
       frameIndex: 23
       additiveSortOrder: 0
       cellRect:
@@ -986,7 +992,7 @@ ScriptedImporter:
         width: 78
         height: 59
       spriteId: a690d335cfcc34f44b38ea0ad1ac2683
-    - name: Bushes_Frame_24
+    - name: Frame_24
       frameIndex: 24
       additiveSortOrder: 0
       cellRect:
@@ -995,7 +1001,7 @@ ScriptedImporter:
         width: 46
         height: 42
       spriteId: 58366b817d875394998fe035cfde018d
-    - name: Bushes_Frame_25
+    - name: Frame_25
       frameIndex: 25
       additiveSortOrder: 0
       cellRect:
@@ -1004,7 +1010,7 @@ ScriptedImporter:
         width: 46
         height: 42
       spriteId: 4ab256c976bb1a242a25d9bc4fbb4142
-    - name: Bushes_Frame_26
+    - name: Frame_26
       frameIndex: 26
       additiveSortOrder: 0
       cellRect:
@@ -1013,7 +1019,7 @@ ScriptedImporter:
         width: 46
         height: 42
       spriteId: 92c1ee2eddf96d243932ad8fc3c8f4c9
-    - name: Bushes_Frame_27
+    - name: Frame_27
       frameIndex: 27
       additiveSortOrder: 0
       cellRect:
@@ -1022,7 +1028,7 @@ ScriptedImporter:
         width: 46
         height: 42
       spriteId: 5a6e4234f26721d408af8338270a0c5c
-    - name: Bushes_Frame_28
+    - name: Frame_28
       frameIndex: 28
       additiveSortOrder: 0
       cellRect:
@@ -1031,7 +1037,7 @@ ScriptedImporter:
         width: 46
         height: 42
       spriteId: 85f040d9a080d484da24b01347c4c1e1
-    - name: Bushes_Frame_29
+    - name: Frame_29
       frameIndex: 29
       additiveSortOrder: 0
       cellRect:
@@ -1040,7 +1046,7 @@ ScriptedImporter:
         width: 46
         height: 42
       spriteId: 420b1b50148c8b24ca93a28228e1349c
-    - name: Bushes_Frame_30
+    - name: Frame_30
       frameIndex: 30
       additiveSortOrder: 0
       cellRect:
@@ -1049,7 +1055,7 @@ ScriptedImporter:
         width: 46
         height: 42
       spriteId: bf00d450f2d8abe41b6620bc9ef631dc
-    - name: Bushes_Frame_31
+    - name: Frame_31
       frameIndex: 31
       additiveSortOrder: 0
       cellRect:
@@ -1065,3 +1071,4 @@ ScriptedImporter:
   secondarySpriteTextures: []
   spritePackingTag: 
   canvasSize: {x: 128, y: 128}
+  previousTextureSize: {x: 512, y: 512}

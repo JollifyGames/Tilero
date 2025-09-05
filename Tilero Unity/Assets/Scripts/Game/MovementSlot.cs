@@ -1,5 +1,7 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
+using TMPro;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -16,6 +18,10 @@ public class MovementSlot : MonoBehaviour, IPointerDownHandler, IPointerUpHandle
     [SerializeField] private float cellSpacing = 40f; // Cell'ler arası mesafe (100'e bölünecek)
     [SerializeField] private bool autoResize = true; // Canvas'a sığmazsa otomatik küçült
     [SerializeField] private float maxCanvasSize = 200f; // Max canvas boyutu (100'e bölünecek = 2.0f)
+    
+    [Header("UI Elements")]
+    [SerializeField] private TextMeshProUGUI costText;
+    [SerializeField] private Image slotBackground;
     
     [Header("Piece Type Prefabs")]
     [SerializeField] private GameObject playerPrefab;
@@ -56,6 +62,8 @@ public class MovementSlot : MonoBehaviour, IPointerDownHandler, IPointerUpHandle
         assignedPattern = pattern;
         Debug.Log($"[MovementSlot {slotIndex}] Pattern assigned: {pattern?.PatternName}");
         UpdatePatternVisualization();
+        UpdateCostDisplay();
+        UpdateSlotAvailability();
     }
     
     private void UpdatePatternVisualization()
@@ -290,6 +298,62 @@ public class MovementSlot : MonoBehaviour, IPointerDownHandler, IPointerUpHandle
             holdEventTriggered = true;
             OnSlotHeld?.Invoke(slotIndex, assignedPattern);
             Debug.Log($"[MovementSlot] Held slot {slotIndex} with pattern: {assignedPattern.PatternName}");
+        }
+    }
+    
+    private void UpdateCostDisplay()
+    {
+        if (costText == null) return;
+        
+        if (assignedPattern != null)
+        {
+            costText.text = assignedPattern.Cost.ToString();
+            costText.gameObject.SetActive(true);
+        }
+        else
+        {
+            costText.gameObject.SetActive(false);
+        }
+    }
+    
+    private void UpdateSlotAvailability()
+    {
+        if (slotBackground == null) return;
+        
+        // Kart yoksa slot'u gri yap
+        if (assignedPattern == null)
+        {
+            slotBackground.color = new Color(0.5f, 0.5f, 0.5f, 0.5f); // Gri ve yarı saydam
+            return;
+        }
+        
+        // Energy kontrolü
+        if (WorldManager.Instance != null)
+        {
+            bool canAfford = WorldManager.Instance.HasEnoughEnergy(assignedPattern.Cost);
+            bool isPlayerTurn = WorldManager.Instance.IsPlayerTurn;
+            
+            if (canAfford && isPlayerTurn)
+            {
+                slotBackground.color = Color.white; // Normal renk
+            }
+            else
+            {
+                slotBackground.color = new Color(1f, 0.5f, 0.5f, 0.8f); // Kırmızımsı, kullanılamaz
+            }
+        }
+        else
+        {
+            slotBackground.color = Color.white; // WorldManager yoksa normal göster
+        }
+    }
+    
+    private void Update()
+    {
+        // Her frame slot availability'yi kontrol et (energy değişebilir)
+        if (assignedPattern != null)
+        {
+            UpdateSlotAvailability();
         }
     }
     

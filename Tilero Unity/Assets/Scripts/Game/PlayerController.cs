@@ -238,11 +238,7 @@ public class PlayerController : MonoBehaviour
         // Pattern tamamlandıktan sonra enemy kontrol et ve attack yap
         yield return CheckAndAttackEnemy(currentPieceType);
         
-        // Attack işlemi bittikten sonra turn'ü enemy'e geç
-        if (WorldManager.Instance != null)
-        {
-            WorldManager.Instance.OnPlayerActionComplete();
-        }
+        // Turn geçişi artık WorldManager'da energy harcanırken otomatik kontrol ediliyor
     }
     
     private IEnumerator CheckAndAttackEnemy(PieceType pieceType)

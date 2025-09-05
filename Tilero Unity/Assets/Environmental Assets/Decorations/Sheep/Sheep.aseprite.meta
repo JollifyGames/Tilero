@@ -8,6 +8,7 @@ ScriptedImporter:
   assetBundleName: 
   assetBundleVariant: 
   script: {fileID: 11500000, guid: 62a9f0aa5b59740cfbadc7e5f9823bb0, type: 3}
+  importerVersion: 2
   textureImporterSettings:
     alphaSource: 1
     mipMapMode: 0
@@ -564,13 +565,18 @@ ScriptedImporter:
   spriteSheetImportData: []
   asepriteLayers:
   - layerIndex: 0
-    guid: -496707857
+    uuid:
+      value0: 3503961451
+      value1: 0
+      value2: 0
+      value3: 0
+    guid: -791005845
     name: Sheep
     layerFlags: 0
     layerType: 0
     blendMode: 0
     cells:
-    - name: Sheep_Frame_0
+    - name: Frame_0
       frameIndex: 0
       additiveSortOrder: 0
       cellRect:
@@ -579,7 +585,7 @@ ScriptedImporter:
         width: 45
         height: 44
       spriteId: a65ed8fb6f688984681bc58a72db0b14
-    - name: Sheep_Frame_1
+    - name: Frame_1
       frameIndex: 1
       additiveSortOrder: 0
       cellRect:
@@ -588,7 +594,7 @@ ScriptedImporter:
         width: 45
         height: 44
       spriteId: 89a0ff1d9dbaac245bad4a0171b78156
-    - name: Sheep_Frame_2
+    - name: Frame_2
       frameIndex: 2
       additiveSortOrder: 0
       cellRect:
@@ -597,7 +603,7 @@ ScriptedImporter:
         width: 45
         height: 44
       spriteId: bc4d1f91886d10d49a23e9fb04a66753
-    - name: Sheep_Frame_3
+    - name: Frame_3
       frameIndex: 3
       additiveSortOrder: 0
       cellRect:
@@ -606,7 +612,7 @@ ScriptedImporter:
         width: 45
         height: 44
       spriteId: a7138709f2247a44fa6c480fff5670e2
-    - name: Sheep_Frame_4
+    - name: Frame_4
       frameIndex: 4
       additiveSortOrder: 0
       cellRect:
@@ -615,7 +621,7 @@ ScriptedImporter:
         width: 45
         height: 44
       spriteId: ff3da65bde652164fbd41bbf74de8963
-    - name: Sheep_Frame_5
+    - name: Frame_5
       frameIndex: 5
       additiveSortOrder: 0
       cellRect:
@@ -624,7 +630,7 @@ ScriptedImporter:
         width: 45
         height: 44
       spriteId: f25a55e93ef241f409b967bda3882b11
-    - name: Sheep_Frame_6
+    - name: Frame_6
       frameIndex: 6
       additiveSortOrder: 0
       cellRect:
@@ -633,7 +639,7 @@ ScriptedImporter:
         width: 45
         height: 44
       spriteId: fbf4c4f72aed97d4ab8951c9af9d74b1
-    - name: Sheep_Frame_7
+    - name: Frame_7
       frameIndex: 7
       additiveSortOrder: 0
       cellRect:
@@ -642,7 +648,7 @@ ScriptedImporter:
         width: 46
         height: 42
       spriteId: 7572058e8d4f6fd46b52e8a797739531
-    - name: Sheep_Frame_8
+    - name: Frame_8
       frameIndex: 8
       additiveSortOrder: 0
       cellRect:
@@ -651,7 +657,7 @@ ScriptedImporter:
         width: 47
         height: 43
       spriteId: 2849e3e9a57cb2840b63dd45cfe3e340
-    - name: Sheep_Frame_9
+    - name: Frame_9
       frameIndex: 9
       additiveSortOrder: 0
       cellRect:
@@ -660,7 +666,7 @@ ScriptedImporter:
         width: 46
         height: 42
       spriteId: 8a9d3d9ec0f3c2740943596b4e805ddc
-    - name: Sheep_Frame_10
+    - name: Frame_10
       frameIndex: 10
       additiveSortOrder: 0
       cellRect:
@@ -669,7 +675,7 @@ ScriptedImporter:
         width: 47
         height: 43
       spriteId: c481a6f3674775540827179a45e0ed9a
-    - name: Sheep_Frame_11
+    - name: Frame_11
       frameIndex: 11
       additiveSortOrder: 0
       cellRect:
@@ -678,7 +684,7 @@ ScriptedImporter:
         width: 46
         height: 42
       spriteId: 7e1cbf957f3b5b44886aceebf3c04cc5
-    - name: Sheep_Frame_12
+    - name: Frame_12
       frameIndex: 12
       additiveSortOrder: 0
       cellRect:
@@ -687,7 +693,7 @@ ScriptedImporter:
         width: 47
         height: 43
       spriteId: 41072d1bf57c95340bc35a1554dfd2a6
-    - name: Sheep_Frame_13
+    - name: Frame_13
       frameIndex: 13
       additiveSortOrder: 0
       cellRect:
@@ -696,7 +702,7 @@ ScriptedImporter:
         width: 46
         height: 42
       spriteId: 8d8395f994020c649b63fb0394db68e9
-    - name: Sheep_Frame_14
+    - name: Frame_14
       frameIndex: 14
       additiveSortOrder: 0
       cellRect:
@@ -705,7 +711,7 @@ ScriptedImporter:
         width: 47
         height: 43
       spriteId: 8db69accc6220df4fb19aaaf0e64bb4d
-    - name: Sheep_Frame_15
+    - name: Frame_15
       frameIndex: 15
       additiveSortOrder: 0
       cellRect:
@@ -714,7 +720,7 @@ ScriptedImporter:
         width: 46
         height: 42
       spriteId: 89d62c7c23b410a438dacc19b76dc097
-    - name: Sheep_Frame_16
+    - name: Frame_16
       frameIndex: 16
       additiveSortOrder: 0
       cellRect:
@@ -723,7 +729,7 @@ ScriptedImporter:
         width: 47
         height: 43
       spriteId: a0dcdc2521be36f4a9ca0fc1802b7953
-    - name: Sheep_Frame_17
+    - name: Frame_17
       frameIndex: 17
       additiveSortOrder: 0
       cellRect:
@@ -732,7 +738,7 @@ ScriptedImporter:
         width: 45
         height: 44
       spriteId: 2fb2c13ace18595439c09fc7737695bd
-    - name: Sheep_Frame_18
+    - name: Frame_18
       frameIndex: 18
       additiveSortOrder: 0
       cellRect:
@@ -741,7 +747,7 @@ ScriptedImporter:
         width: 46
         height: 45
       spriteId: 0e09eb8990781ab4592d208041cff719
-    - name: Sheep_Frame_19
+    - name: Frame_19
       frameIndex: 19
       additiveSortOrder: 0
       cellRect:
@@ -750,7 +756,7 @@ ScriptedImporter:
         width: 47
         height: 47
       spriteId: 76e8d976bbc38d345956d5ba0cfb7c67
-    - name: Sheep_Frame_20
+    - name: Frame_20
       frameIndex: 20
       additiveSortOrder: 0
       cellRect:
@@ -759,7 +765,7 @@ ScriptedImporter:
         width: 47
         height: 45
       spriteId: 8734a11cd6da33c4e93b98af165914bd
-    - name: Sheep_Frame_21
+    - name: Frame_21
       frameIndex: 21
       additiveSortOrder: 0
       cellRect:
@@ -775,3 +781,4 @@ ScriptedImporter:
   secondarySpriteTextures: []
   spritePackingTag: 
   canvasSize: {x: 128, y: 128}
+  previousTextureSize: {x: 256, y: 512}

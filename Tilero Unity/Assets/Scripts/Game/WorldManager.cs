@@ -15,8 +15,14 @@ public class WorldManager : MonoBehaviour, IManager
     [Header("Turn Management")]
     [SerializeField] private TurnState currentTurn = TurnState.PlayerTurn;
     
+    [Header("Energy System")]
+    [SerializeField] private int playerEnergyBase = 4;
+    private int currentPlayerEnergy;
+    
     public TurnState CurrentTurn => currentTurn;
     public bool IsPlayerTurn => currentTurn == TurnState.PlayerTurn;
+    public int CurrentPlayerEnergy => currentPlayerEnergy;
+    public int PlayerEnergyBase => playerEnergyBase;
     
     private void Awake()
     {
@@ -32,6 +38,7 @@ public class WorldManager : MonoBehaviour, IManager
     public IEnumerator Initialize()
     {
         Debug.Log("[WorldManager] Initialized - Starting with Player Turn");
+        currentPlayerEnergy = playerEnergyBase;
         StartPlayerTurn();
         yield return null;
     }
@@ -39,7 +46,10 @@ public class WorldManager : MonoBehaviour, IManager
     private void StartPlayerTurn()
     {
         currentTurn = TurnState.PlayerTurn;
-        Debug.Log("[WorldManager] === PLAYER TURN START ===");
+        
+        // Reset player energy
+        currentPlayerEnergy = playerEnergyBase;
+        Debug.Log($"[WorldManager] === PLAYER TURN START === Energy: {currentPlayerEnergy}/{playerEnergyBase}");
         
         // Reset player defense buff
         if (PlayerController.Instance != null)
@@ -49,6 +59,70 @@ public class WorldManager : MonoBehaviour, IManager
             {
                 playerChar.ResetDefense();
             }
+        }
+        
+        // Refresh all slots
+        if (SlotManager.Instance != null)
+        {
+            SlotManager.Instance.RefreshAllSlots();
+        }
+    }
+    
+    public bool HasEnoughEnergy(int cost)
+    {
+        return currentPlayerEnergy >= cost;
+    }
+    
+    public bool SpendEnergy(int cost)
+    {
+        if (!HasEnoughEnergy(cost))
+        {
+            Debug.LogWarning($"[WorldManager] Not enough energy! Need {cost}, have {currentPlayerEnergy}");
+            return false;
+        }
+        
+        currentPlayerEnergy -= cost;
+        Debug.Log($"[WorldManager] Spent {cost} energy. Remaining: {currentPlayerEnergy}/{playerEnergyBase}");
+        
+        // Check if player can still play any cards
+        CheckForAutoEndTurn();
+        
+        return true;
+    }
+    
+    private void CheckForAutoEndTurn()
+    {
+        // Eğer energy 0 veya tüm kartlar çok pahalıysa turn'ü otomatik bitir
+        if (currentPlayerEnergy <= 0)
+        {
+            Debug.Log("[WorldManager] Energy depleted, auto-ending turn");
+            StartCoroutine(DelayedEndTurn());
+        }
+        else if (SlotManager.Instance != null && !SlotManager.Instance.CanPlayAnyCard())
+        {
+            Debug.Log("[WorldManager] No playable cards with remaining energy, auto-ending turn");
+            StartCoroutine(DelayedEndTurn());
+        }
+    }
+    
+    private IEnumerator DelayedEndTurn()
+    {
+        // Kısa bir delay, animasyonların bitmesini bekle
+        yield return new WaitForSeconds(0.5f);
+        
+        if (currentTurn == TurnState.PlayerTurn)
+        {
+            OnPlayerActionComplete();
+        }
+    }
+    
+    public void EndPlayerTurn()
+    {
+        // Manual turn end
+        if (currentTurn == TurnState.PlayerTurn)
+        {
+            Debug.Log("[WorldManager] Player manually ending turn");
+            OnPlayerActionComplete();
         }
     }
     
