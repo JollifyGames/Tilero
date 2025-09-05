@@ -8,6 +8,7 @@ ScriptedImporter:
   assetBundleName: 
   assetBundleVariant: 
   script: {fileID: 11500000, guid: 62a9f0aa5b59740cfbadc7e5f9823bb0, type: 3}
+  importerVersion: 2
   textureImporterSettings:
     alphaSource: 1
     mipMapMode: 0
@@ -844,13 +845,18 @@ ScriptedImporter:
   spriteSheetImportData: []
   asepriteLayers:
   - layerIndex: 0
-    guid: -1117502119
+    uuid:
+      value0: 2615276029
+      value1: 0
+      value2: 0
+      value3: 0
+    guid: -1679691267
     name: Tiles Guide
     layerFlags: 0
     layerType: 0
     blendMode: 0
     cells:
-    - name: Tiles Guide_Frame_0
+    - name: Frame_0
       frameIndex: 0
       additiveSortOrder: 0
       cellRect:
@@ -859,7 +865,7 @@ ScriptedImporter:
         width: 1151
         height: 472
       spriteId: 2f238921360a84b4f8d954066c944ca1
-    - name: Tiles Guide_Frame_12
+    - name: Frame_12
       frameIndex: 12
       additiveSortOrder: 0
       cellRect:
@@ -868,7 +874,7 @@ ScriptedImporter:
         width: 1151
         height: 586
       spriteId: 51f51fea5ef7ad14db2ad8d4b4244589
-    - name: Tiles Guide_Frame_24
+    - name: Frame_24
       frameIndex: 24
       additiveSortOrder: 0
       cellRect:
@@ -877,7 +883,7 @@ ScriptedImporter:
         width: 1151
         height: 586
       spriteId: 02a03d93f96384e4e8a741a27e9a6989
-    - name: Tiles Guide_Frame_1
+    - name: Frame_1
       frameIndex: 1
       additiveSortOrder: 0
       cellRect:
@@ -886,7 +892,7 @@ ScriptedImporter:
         width: 1151
         height: 472
       spriteId: e409ce9ce17bd8a4289b52b80c135899
-    - name: Tiles Guide_Frame_2
+    - name: Frame_2
       frameIndex: 2
       additiveSortOrder: 0
       cellRect:
@@ -895,7 +901,7 @@ ScriptedImporter:
         width: 1151
         height: 472
       spriteId: 6557d0c1718c7a74c81da2df247f251f
-    - name: Tiles Guide_Frame_3
+    - name: Frame_3
       frameIndex: 3
       additiveSortOrder: 0
       cellRect:
@@ -904,7 +910,7 @@ ScriptedImporter:
         width: 1151
         height: 472
       spriteId: a32e484b0078067478c6d3dfb7ccb893
-    - name: Tiles Guide_Frame_4
+    - name: Frame_4
       frameIndex: 4
       additiveSortOrder: 0
       cellRect:
@@ -913,7 +919,7 @@ ScriptedImporter:
         width: 1151
         height: 472
       spriteId: 57fde1a8f40d63d46be3bfc081d3fb0f
-    - name: Tiles Guide_Frame_5
+    - name: Frame_5
       frameIndex: 5
       additiveSortOrder: 0
       cellRect:
@@ -922,7 +928,7 @@ ScriptedImporter:
         width: 1151
         height: 472
       spriteId: 566a91cc408576b4db638afb449c4613
-    - name: Tiles Guide_Frame_6
+    - name: Frame_6
       frameIndex: 6
       additiveSortOrder: 0
       cellRect:
@@ -931,7 +937,7 @@ ScriptedImporter:
         width: 1151
         height: 472
       spriteId: d25e41c7333cd9a4485fe8b7f130ab89
-    - name: Tiles Guide_Frame_7
+    - name: Frame_7
       frameIndex: 7
       additiveSortOrder: 0
       cellRect:
@@ -940,7 +946,7 @@ ScriptedImporter:
         width: 1151
         height: 472
       spriteId: ca530dae8091ffe4487575b537756fe6
-    - name: Tiles Guide_Frame_8
+    - name: Frame_8
       frameIndex: 8
       additiveSortOrder: 0
       cellRect:
@@ -949,7 +955,7 @@ ScriptedImporter:
         width: 1151
         height: 472
       spriteId: 23acdff07b6d2dc4491898c49a8b249c
-    - name: Tiles Guide_Frame_9
+    - name: Frame_9
       frameIndex: 9
       additiveSortOrder: 0
       cellRect:
@@ -958,7 +964,7 @@ ScriptedImporter:
         width: 1151
         height: 472
       spriteId: 4e41b84c867a9ad45a91d2717fb03c42
-    - name: Tiles Guide_Frame_10
+    - name: Frame_10
       frameIndex: 10
       additiveSortOrder: 0
       cellRect:
@@ -967,7 +973,7 @@ ScriptedImporter:
         width: 1151
         height: 472
       spriteId: 3ebc37f9d6d94d94e8d5b77f8c62fd91
-    - name: Tiles Guide_Frame_11
+    - name: Frame_11
       frameIndex: 11
       additiveSortOrder: 0
       cellRect:
@@ -976,7 +982,7 @@ ScriptedImporter:
         width: 1151
         height: 472
       spriteId: bbeb7609d45315741b1f0af6517de499
-    - name: Tiles Guide_Frame_13
+    - name: Frame_13
       frameIndex: 13
       additiveSortOrder: 0
       cellRect:
@@ -985,7 +991,7 @@ ScriptedImporter:
         width: 1151
         height: 586
       spriteId: 33f00d4d068598548bdfa76ba16650dd
-    - name: Tiles Guide_Frame_14
+    - name: Frame_14
       frameIndex: 14
       additiveSortOrder: 0
       cellRect:
@@ -994,7 +1000,7 @@ ScriptedImporter:
         width: 1151
         height: 586
       spriteId: d97bfd3a21fcf3f4cbcccca492083acd
-    - name: Tiles Guide_Frame_15
+    - name: Frame_15
       frameIndex: 15
       additiveSortOrder: 0
       cellRect:
@@ -1003,7 +1009,7 @@ ScriptedImporter:
         width: 1151
         height: 586
       spriteId: 753234981cdf7df49b2d9ff112893aa4
-    - name: Tiles Guide_Frame_16
+    - name: Frame_16
       frameIndex: 16
       additiveSortOrder: 0
       cellRect:
@@ -1012,7 +1018,7 @@ ScriptedImporter:
         width: 1151
         height: 586
       spriteId: 2b3ece33ee5315d4987d754ac19c6682
-    - name: Tiles Guide_Frame_17
+    - name: Frame_17
       frameIndex: 17
       additiveSortOrder: 0
       cellRect:
@@ -1021,7 +1027,7 @@ ScriptedImporter:
         width: 1151
         height: 586
       spriteId: 7e15c7b5d7b662245b1614444dbb6891
-    - name: Tiles Guide_Frame_18
+    - name: Frame_18
       frameIndex: 18
       additiveSortOrder: 0
       cellRect:
@@ -1030,7 +1036,7 @@ ScriptedImporter:
         width: 1151
         height: 586
       spriteId: 9ca3d00e107ad8345b1679014deb73ac
-    - name: Tiles Guide_Frame_19
+    - name: Frame_19
       frameIndex: 19
       additiveSortOrder: 0
       cellRect:
@@ -1039,7 +1045,7 @@ ScriptedImporter:
         width: 1151
         height: 586
       spriteId: bc4693eff487cc54c9cf23b5774a8475
-    - name: Tiles Guide_Frame_20
+    - name: Frame_20
       frameIndex: 20
       additiveSortOrder: 0
       cellRect:
@@ -1048,7 +1054,7 @@ ScriptedImporter:
         width: 1151
         height: 586
       spriteId: e514d4886e1ca0d4fb1c36f73a1cdf49
-    - name: Tiles Guide_Frame_21
+    - name: Frame_21
       frameIndex: 21
       additiveSortOrder: 0
       cellRect:
@@ -1057,7 +1063,7 @@ ScriptedImporter:
         width: 1151
         height: 586
       spriteId: 76d6fc821768eb14ba344a1cd6d01913
-    - name: Tiles Guide_Frame_22
+    - name: Frame_22
       frameIndex: 22
       additiveSortOrder: 0
       cellRect:
@@ -1066,7 +1072,7 @@ ScriptedImporter:
         width: 1151
         height: 586
       spriteId: fcb63fda68c99894f8212ef491e1f165
-    - name: Tiles Guide_Frame_23
+    - name: Frame_23
       frameIndex: 23
       additiveSortOrder: 0
       cellRect:
@@ -1075,7 +1081,7 @@ ScriptedImporter:
         width: 1151
         height: 586
       spriteId: dca8f5946dd86fe4696950ae6f339509
-    - name: Tiles Guide_Frame_25
+    - name: Frame_25
       frameIndex: 25
       additiveSortOrder: 0
       cellRect:
@@ -1084,7 +1090,7 @@ ScriptedImporter:
         width: 1151
         height: 586
       spriteId: 227c6632c4798ae4b8dd2c66e46f9a6b
-    - name: Tiles Guide_Frame_26
+    - name: Frame_26
       frameIndex: 26
       additiveSortOrder: 0
       cellRect:
@@ -1093,7 +1099,7 @@ ScriptedImporter:
         width: 1151
         height: 586
       spriteId: 17603fde9c814bf448470f2b02b64e9e
-    - name: Tiles Guide_Frame_27
+    - name: Frame_27
       frameIndex: 27
       additiveSortOrder: 0
       cellRect:
@@ -1102,7 +1108,7 @@ ScriptedImporter:
         width: 1151
         height: 586
       spriteId: c113ad3eafebb884ca7b06e7a9ef6055
-    - name: Tiles Guide_Frame_28
+    - name: Frame_28
       frameIndex: 28
       additiveSortOrder: 0
       cellRect:
@@ -1111,7 +1117,7 @@ ScriptedImporter:
         width: 1151
         height: 586
       spriteId: 9e998c46cd136fc46b9ca06c2e2ca47c
-    - name: Tiles Guide_Frame_29
+    - name: Frame_29
       frameIndex: 29
       additiveSortOrder: 0
       cellRect:
@@ -1120,7 +1126,7 @@ ScriptedImporter:
         width: 1151
         height: 586
       spriteId: d82c4630014f60d4e8abebd820c0aaba
-    - name: Tiles Guide_Frame_30
+    - name: Frame_30
       frameIndex: 30
       additiveSortOrder: 0
       cellRect:
@@ -1129,7 +1135,7 @@ ScriptedImporter:
         width: 1151
         height: 586
       spriteId: 829e7830b3dc41c4fbcc073c2fa8f93d
-    - name: Tiles Guide_Frame_31
+    - name: Frame_31
       frameIndex: 31
       additiveSortOrder: 0
       cellRect:
@@ -1138,7 +1144,7 @@ ScriptedImporter:
         width: 1151
         height: 586
       spriteId: 220803768adb33c449fc9a9c07eff6de
-    - name: Tiles Guide_Frame_32
+    - name: Frame_32
       frameIndex: 32
       additiveSortOrder: 0
       cellRect:
@@ -1147,7 +1153,7 @@ ScriptedImporter:
         width: 1151
         height: 586
       spriteId: d51c6fd82175eeb44803d42bc2eb3dd4
-    - name: Tiles Guide_Frame_33
+    - name: Frame_33
       frameIndex: 33
       additiveSortOrder: 0
       cellRect:
@@ -1156,7 +1162,7 @@ ScriptedImporter:
         width: 1151
         height: 586
       spriteId: 36712a6030d0bc64eb8b2127bece543f
-    - name: Tiles Guide_Frame_34
+    - name: Frame_34
       frameIndex: 34
       additiveSortOrder: 0
       cellRect:
@@ -1165,7 +1171,7 @@ ScriptedImporter:
         width: 1151
         height: 586
       spriteId: 04d45a6148af841459b478a926ecb0d8
-    - name: Tiles Guide_Frame_35
+    - name: Frame_35
       frameIndex: 35
       additiveSortOrder: 0
       cellRect:
@@ -1181,3 +1187,4 @@ ScriptedImporter:
   secondarySpriteTextures: []
   spritePackingTag: 
   canvasSize: {x: 1280, y: 512}
+  previousTextureSize: {x: 4096, y: 8192}
