@@ -41,3 +41,15 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: Sea
+    uniqueID: 1099620171
+    locked: 0
+  - name: Sea Foam
+    uniqueID: 2417361015
+    locked: 0
+  - name: Grass
+    uniqueID: 678563157
+    locked: 0
+  - name: Grass Height
+    uniqueID: 947760715
+    locked: 0
