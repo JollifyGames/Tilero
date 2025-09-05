@@ -22,9 +22,14 @@ public class GridManager : MonoBehaviour, IManager
     [SerializeField] private System.Collections.Generic.List<Vector2Int> obstaclesList = new System.Collections.Generic.List<Vector2Int>();
     [SerializeField] private GameObject obstaclePrefab;
     
+    [Header("Border Settings")]
+    [SerializeField] private System.Collections.Generic.List<Vector2Int> bordersList = new System.Collections.Generic.List<Vector2Int>();
+    [SerializeField] private GameObject borderPrefab;
+    
     private GridCell[,] grid;
     private System.Collections.Generic.List<GameObject> activePreviewObjects = new System.Collections.Generic.List<GameObject>();
     private System.Collections.Generic.List<GameObject> obstacleObjects = new System.Collections.Generic.List<GameObject>();
+    private System.Collections.Generic.List<GameObject> borderObjects = new System.Collections.Generic.List<GameObject>();
     
     public Vector2Int GridSize => gridSize;
     public Vector3 GridWorldPosition => gridWorldPosition;
@@ -45,6 +50,7 @@ public class GridManager : MonoBehaviour, IManager
     {
         CreateGrid();
         CreateObstacles();
+        CreateBorders();
         yield return null;
     }
     
@@ -112,6 +118,40 @@ public class GridManager : MonoBehaviour, IManager
         Debug.Log($"[GridManager] Created {obstacleObjects.Count} obstacles");
     }
     
+    private void CreateBorders()
+    {
+        if (bordersList == null || bordersList.Count == 0)
+        {
+            Debug.Log("[GridManager] No borders to create");
+            return;
+        }
+        
+        foreach (var borderPos in bordersList)
+        {
+            if (IsValidPosition(borderPos.x, borderPos.y))
+            {
+                GridCell cell = grid[borderPos.x, borderPos.y];
+                cell.IsBorder = true;
+                // Borders are not marked as occupied, they can be knockbacked into
+                
+                if (borderPrefab != null)
+                {
+                    GameObject border = Instantiate(borderPrefab, cell.WorldPosition, Quaternion.identity, cellParent);
+                    border.name = $"Border_{borderPos.x}_{borderPos.y}";
+                    borderObjects.Add(border);
+                }
+                
+                Debug.Log($"[GridManager] Border created at position ({borderPos.x}, {borderPos.y})");
+            }
+            else
+            {
+                Debug.LogWarning($"[GridManager] Invalid border position: ({borderPos.x}, {borderPos.y})");
+            }
+        }
+        
+        Debug.Log($"[GridManager] Created {borderObjects.Count} borders");
+    }
+    
     public Vector3 GetCellWorldPosition(int x, int y)
     {
         float gridWidth = gridSize.x * cellSize;
@@ -158,7 +198,7 @@ public class GridManager : MonoBehaviour, IManager
             return false;
         
         GridCell cell = grid[x, y];
-        return !cell.IsObstacle && !cell.IsOccupied;
+        return !cell.IsObstacle && !cell.IsOccupied && !cell.IsBorder;
     }
     
     public bool IsWalkable(Vector2Int position)

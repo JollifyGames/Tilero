@@ -5094,7 +5094,7 @@ Tilemap:
       - {fileID: 1607886606, guid: a4a14bfe11a730042a662cd4579f8fd7, type: 3}
       - {fileID: -945847060, guid: a4a14bfe11a730042a662cd4579f8fd7, type: 3}
       - {fileID: 1823927445, guid: a4a14bfe11a730042a662cd4579f8fd7, type: 3}
-      m_AnimationSpeed: 12
+      m_AnimationSpeed: 12.000001
       m_AnimationTimeOffset: 0
       m_Flags: 0
   - first: {x: 4, y: -1, z: 0}
@@ -7073,7 +7073,7 @@ SpriteRenderer:
   m_SortingLayer: 5
   m_SortingOrder: 1
   m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.03529412}
+  m_Color: {r: 1, g: 1, b: 1, a: 0.003921569}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -7650,7 +7650,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 27713dd436072fc42a2b67cbe9649590, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gridSize: {x: 6, y: 9}
+  gridSize: {x: 8, y: 11}
   gridWorldPosition: {x: 0, y: -0.5, z: 0}
   cellSize: 1
   testPrefab: {fileID: 203528151}
@@ -7658,11 +7658,48 @@ MonoBehaviour:
   previewPrefab: {fileID: 1488688457}
   previewParent: {fileID: 1297055842}
   obstaclesList:
-  - {x: 3, y: 2}
-  - {x: 3, y: 3}
-  - {x: 1, y: 6}
-  - {x: 2, y: 6}
+  - {x: 4, y: 3}
+  - {x: 4, y: 4}
+  - {x: 2, y: 7}
+  - {x: 3, y: 7}
+  - {x: 0, y: 4}
+  - {x: 0, y: 5}
+  - {x: 0, y: 6}
+  - {x: 0, y: 7}
+  - {x: 7, y: 6}
+  - {x: 7, y: 7}
+  - {x: 0, y: 8}
   obstaclePrefab: {fileID: 747726765}
+  bordersList:
+  - {x: 0, y: 0}
+  - {x: 1, y: 0}
+  - {x: 2, y: 0}
+  - {x: 3, y: 0}
+  - {x: 4, y: 0}
+  - {x: 5, y: 0}
+  - {x: 6, y: 0}
+  - {x: 7, y: 0}
+  - {x: 0, y: 1}
+  - {x: 0, y: 2}
+  - {x: 0, y: 3}
+  - {x: 0, y: 9}
+  - {x: 0, y: 10}
+  - {x: 7, y: 1}
+  - {x: 7, y: 2}
+  - {x: 7, y: 3}
+  - {x: 7, y: 4}
+  - {x: 7, y: 5}
+  - {x: 7, y: 8}
+  - {x: 7, y: 9}
+  - {x: 7, y: 10}
+  - {x: 0, y: 10}
+  - {x: 1, y: 10}
+  - {x: 2, y: 10}
+  - {x: 3, y: 10}
+  - {x: 4, y: 10}
+  - {x: 5, y: 10}
+  - {x: 6, y: 10}
+  borderPrefab: {fileID: 747726765}
 --- !u!1 &1147827651
 GameObject:
   m_ObjectHideFlags: 0
@@ -9241,7 +9278,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5082599ee95a18d4b96df66c0837f004, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerStartCell: {x: 0, y: 0}
+  playerStartCell: {x: 1, y: 1}
   playerStartDirection: 3
   playerPrefab: {fileID: 8885412417579424665, guid: 498c9d9439ebfc043a2c74163a57780c, type: 3}
 --- !u!1 &1650142083
@@ -9290,9 +9327,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemySpawnList:
   - enemyPrefab: {fileID: 8885412417579424665, guid: d4142f7fdb102ec4c92b6f4aea4ed98a, type: 3}
-    gridPosition: {x: 3, y: 4}
+    gridPosition: {x: 4, y: 5}
   - enemyPrefab: {fileID: 8885412417579424665, guid: d4142f7fdb102ec4c92b6f4aea4ed98a, type: 3}
-    gridPosition: {x: 3, y: 0}
+    gridPosition: {x: 4, y: 1}
 --- !u!1 &1671524835
 GameObject:
   m_ObjectHideFlags: 0

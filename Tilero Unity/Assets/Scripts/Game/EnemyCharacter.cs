@@ -121,14 +121,23 @@ public class EnemyCharacter : MonoBehaviour
         Vector2Int knockbackOffset = GetDirectionVector(knockbackDirection);
         Vector2Int targetPos = currentPos + knockbackOffset;
         
-        // Check if target position is valid and empty
+        // Check if target position is valid and what type it is
         bool canKnockback = false;
         bool willHitWall = false;
+        bool willHitBorder = false;
         
         if (GridManager.Instance.IsValidPosition(targetPos.x, targetPos.y))
         {
             GridCell targetCell = GridManager.Instance.GetCell(targetPos.x, targetPos.y);
-            if (!targetCell.IsOccupied && !targetCell.IsObstacle)
+            
+            // Check if it's a border - can be knocked into but results in death
+            if (targetCell.IsBorder)
+            {
+                canKnockback = true;
+                willHitBorder = true;
+                Debug.Log($"[EnemyCharacter] Will be knocked into border at {targetPos} - instant death!");
+            }
+            else if (!targetCell.IsOccupied && !targetCell.IsObstacle)
             {
                 canKnockback = true;
             }
@@ -173,6 +182,13 @@ public class EnemyCharacter : MonoBehaviour
             }
             
             Debug.Log($"[EnemyCharacter] Knockback complete, moved to {targetPos}");
+            
+            // Check if landed on border - instant death
+            if (willHitBorder)
+            {
+                Debug.Log($"[EnemyCharacter] {gameObject.name} fell into border! INSTANT DEATH!");
+                Die();
+            }
         }
         else if (willHitWall)
         {

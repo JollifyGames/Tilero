@@ -11,6 +11,7 @@ public class GridCell
     public GameObject OccupiedObject => OccupyingObject; // Alias for compatibility
     public Vector2Int GridPosition => new Vector2Int(X, Y);
     public bool IsObstacle { get; set; }
+    public bool IsBorder { get; set; }
     
     public GridCell(int x, int y, Vector3 worldPosition)
     {
@@ -20,6 +21,7 @@ public class GridCell
         IsOccupied = false;
         OccupyingObject = null;
         IsObstacle = false;
+        IsBorder = false;
     }
     
     public void SetOccupied(GameObject occupyingObject)

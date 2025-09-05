@@ -100,6 +100,12 @@ public class BoardManager : MonoBehaviour, IManager
         }
         
         GridCell targetCell = GridManager.Instance.GetCell(toCell.x, toCell.y);
+        if (targetCell.IsBorder)
+        {
+            Debug.Log($"[BoardManager] Cell {toCell} is a border - cannot walk there");
+            return false;
+        }
+        
         if (targetCell.IsObstacle)
         {
             Debug.Log($"[BoardManager] Cell {toCell} is an obstacle");
