@@ -82,6 +82,12 @@ public class PlayerCharacter : MonoBehaviour
         if (model != null)
         {
             model.ResetDefense();
+            
+            PlayerController playerController = GetComponent<PlayerController>();
+            if (playerController != null)
+            {
+                playerController.SetDefenseState(false);
+            }
         }
     }
 }

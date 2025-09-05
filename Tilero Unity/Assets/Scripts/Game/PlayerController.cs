@@ -8,18 +8,14 @@ public class PlayerController : MonoBehaviour
     public static PlayerController Instance { get; private set; }
     [Header("Movement Settings")]
     [SerializeField] private float moveAnimationDuration = 0.3f;
-    [SerializeField] private float jumpHeightX = 0.5f;
-    [SerializeField] private float jumpHeightY = 0.5f;
-    [SerializeField] private AnimationCurve jumpCurve = AnimationCurve.EaseInOut(0, 0, 1, 1);
     
     [Header("Visual Settings")]
-    [SerializeField] private Transform visualTransform;
-    [SerializeField] private float rotationDuration = 0.2f;
+    [SerializeField] private Transform visual;
+    [SerializeField] private Animator animator;
     
     private BoardManager boardManager;
     private bool canMove = true;
     private bool isMoving = false;
-    private Vector2Int lastMoveDirection = Vector2Int.zero;
     private Direction currentDirection = Direction.Down;
     
     public bool IsMoving => isMoving;
@@ -42,12 +38,12 @@ public class PlayerController : MonoBehaviour
         
         this.boardManager = boardManager;
         
-        if (visualTransform == null)
-        {
-            visualTransform = transform;
-        }
+        if (visual == null)
+            visual = transform.GetChild(0);
         
-        UpdateVisualDirection();
+        if (animator == null && visual != null)
+            animator = visual.GetComponent<Animator>();
+            
         Debug.Log("[PlayerController] Initialized");
     }
     
@@ -84,7 +80,6 @@ public class PlayerController : MonoBehaviour
         
         if (moveDirection != Vector2Int.zero)
         {
-            lastMoveDirection = moveDirection;
             UpdateDirection(moveDirection);
             bool moved = boardManager.TryMovePlayer(moveDirection);
             if (moved)
@@ -101,29 +96,34 @@ public class PlayerController : MonoBehaviour
         isMoving = true;
         boardManager.SetMovingState(true);
         
-        Vector3 startPos = transform.position;
-        Vector3 midPoint = (startPos + targetPosition) / 2f;
+        TriggerMovementAnimation();
+        SetWalkingState(true);
         
-        // X ekseninde hareket ediyorsa jumpHeightX, Y ekseninde hareket ediyorsa jumpHeightY kullan
-        float currentJumpHeight = (lastMoveDirection.x != 0) ? jumpHeightX : jumpHeightY;
-        midPoint.y += currentJumpHeight;
+        transform.DOMove(targetPosition, moveAnimationDuration)
+            .SetEase(Ease.Linear)
+            .OnComplete(() =>
+            {
+                isMoving = false;
+                boardManager.SetMovingState(false);
+                SetWalkingState(false);
+                Debug.Log("[PlayerController] Move completed");
+            });
+    }
+    
+    private void TriggerMovementAnimation()
+    {
+        if (animator == null) return;
         
-        Sequence moveSequence = DOTween.Sequence();
-        
-        moveSequence.Append(transform.DOMove(midPoint, moveAnimationDuration * 0.5f)
-            .SetEase(jumpCurve));
-        
-        moveSequence.Append(transform.DOMove(targetPosition, moveAnimationDuration * 0.5f)
-            .SetEase(jumpCurve));
-        
-        moveSequence.OnComplete(() =>
-        {
-            isMoving = false;
-            boardManager.SetMovingState(false);
-            Debug.Log("[PlayerController] Move completed");
-        });
-        
-        moveSequence.Play();
+        if (currentDirection == Direction.Up)
+            animator.SetTrigger("RunBack");
+        else
+            animator.SetTrigger("Run");
+    }
+    
+    private void SetWalkingState(bool isWalking)
+    {
+        if (animator == null) return;
+        animator.SetBool("IsWalking", isWalking);
     }
     
     private void UpdateDirection(Vector2Int moveDirection)
@@ -139,43 +139,27 @@ public class PlayerController : MonoBehaviour
         else if (moveDirection == Vector2Int.right)
             newDirection = Direction.Right;
         
-        if (newDirection != currentDirection)
-        {
-            currentDirection = newDirection;
-            UpdateVisualDirection();
-        }
+        currentDirection = newDirection;
+        UpdateVisualFlip();
     }
     
-    private void UpdateVisualDirection()
+    private void UpdateVisualFlip()
     {
-        if (visualTransform == null) return;
+        if (visual == null) return;
         
-        float targetRotation = 0f;
+        Vector3 scale = visual.localScale;
+        if (currentDirection == Direction.Left)
+            scale.x = -Mathf.Abs(scale.x);
+        else if (currentDirection == Direction.Right)
+            scale.x = Mathf.Abs(scale.x);
         
-        switch (currentDirection)
-        {
-            case Direction.Up:
-                targetRotation = 0f;
-                break;
-            case Direction.Down:
-                targetRotation = 180f;
-                break;
-            case Direction.Left:
-                targetRotation = 90f;
-                break;
-            case Direction.Right:
-                targetRotation = -90f;
-                break;
-        }
-        
-        visualTransform.DORotate(new Vector3(0, 0, targetRotation), rotationDuration)
-            .SetEase(Ease.OutQuad);
+        visual.localScale = scale;
     }
     
     public void SetDirection(Direction direction)
     {
         currentDirection = direction;
-        UpdateVisualDirection();
+        UpdateVisualFlip();
     }
     
     public void ExecuteMovementPattern(PatternSO pattern, List<Vector2Int> absoluteSteps)
@@ -246,6 +230,7 @@ public class PlayerController : MonoBehaviour
             if (playerChar != null)
             {
                 playerChar.ApplyDefenseBuff();
+                SetDefenseState(true);
                 Debug.Log("[PlayerController] Defense buff applied!");
             }
         }
@@ -281,7 +266,6 @@ public class PlayerController : MonoBehaviour
             if (directionToEnemy != currentDirection)
             {
                 SetDirection(directionToEnemy);
-                yield return new WaitForSeconds(rotationDuration); // Dönüş animasyonu bitene kadar bekle
             }
             
             // Attack uygula (sadece Basic, Attack, Special için)
@@ -289,9 +273,28 @@ public class PlayerController : MonoBehaviour
         }
     }
     
+    private void TriggerAttackAnimation(PieceType pieceType)
+    {
+        if (animator == null) return;
+        
+        if (pieceType == PieceType.Basic)
+            animator.SetTrigger("Attack");
+        else if (pieceType == PieceType.Attack || pieceType == PieceType.Special)
+            animator.SetTrigger("Attack2");
+    }
+    
+    public void SetDefenseState(bool isDefending)
+    {
+        if (animator == null) return;
+        animator.SetBool("IsDefense", isDefending);
+    }
+    
     private void Attack(EnemyCharacter target, PieceType pieceType)
     {
         Debug.Log($"[PlayerController] === ATTACK === Attacking {target.gameObject.name} with PieceType: {pieceType}!");
+        
+        // Trigger attack animation
+        TriggerAttackAnimation(pieceType);
         
         // Get player damage from model
         PlayerCharacter playerChar = GetComponent<PlayerCharacter>();
@@ -316,26 +319,16 @@ public class PlayerController : MonoBehaviour
     {
         isMoving = true;
         
-        Vector3 startPos = transform.position;
-        Vector3 midPoint = (startPos + targetPosition) / 2f;
+        TriggerMovementAnimation();
+        SetWalkingState(true);
         
-        float currentJumpHeight = (lastMoveDirection.x != 0) ? jumpHeightX : jumpHeightY;
-        midPoint.y += currentJumpHeight;
-        
-        Sequence moveSequence = DOTween.Sequence();
-        
-        moveSequence.Append(transform.DOMove(midPoint, moveAnimationDuration * 0.5f)
-            .SetEase(jumpCurve));
-        
-        moveSequence.Append(transform.DOMove(targetPosition, moveAnimationDuration * 0.5f)
-            .SetEase(jumpCurve));
-        
-        moveSequence.OnComplete(() =>
-        {
-            isMoving = false;
-            Debug.Log("[PlayerController] Move completed");
-        });
-        
-        moveSequence.Play();
+        transform.DOMove(targetPosition, moveAnimationDuration)
+            .SetEase(Ease.Linear)
+            .OnComplete(() =>
+            {
+                isMoving = false;
+                SetWalkingState(false);
+                Debug.Log("[PlayerController] Move completed");
+            });
     }
 }

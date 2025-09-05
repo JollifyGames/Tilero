@@ -8,12 +8,10 @@ public class EnemyMovement : MonoBehaviour
     [Header("Movement Settings")]
     [SerializeField] private int movementRange = 1;
     [SerializeField] private float moveAnimationDuration = 0.3f;
-    [SerializeField] private float jumpHeight = 0.3f;
-    [SerializeField] private AnimationCurve jumpCurve = AnimationCurve.EaseInOut(0, 0, 1, 1);
     
     [Header("Visual Settings")]
-    [SerializeField] private Transform visualTransform;
-    [SerializeField] private float rotationDuration = 0.2f;
+    [SerializeField] private Transform visual;
+    [SerializeField] private Animator animator;
     
     private Direction currentDirection = Direction.Down;
     private bool isMoving = false;
@@ -24,10 +22,11 @@ public class EnemyMovement : MonoBehaviour
     
     private void Awake()
     {
-        if (visualTransform == null)
-        {
-            visualTransform = transform;
-        }
+        if (visual == null)
+            visual = transform.GetChild(0);
+        
+        if (animator == null && visual != null)
+            animator = visual.GetComponent<Animator>();
         
         // Get initial grid position
         if (GridManager.Instance != null)
@@ -73,7 +72,6 @@ public class EnemyMovement : MonoBehaviour
             // Face the player but don't move (player is adjacent)
             Direction dirToPlayer = GetDirectionTo(playerPosition);
             SetDirection(dirToPlayer);
-            yield return new WaitForSeconds(rotationDuration);
             Debug.Log($"[EnemyMovement] {gameObject.name} facing player, ready to attack");
         }
     }
@@ -167,37 +165,30 @@ public class EnemyMovement : MonoBehaviour
         // Get target world position
         Vector3 targetWorldPos = GridManager.Instance.GetCellWorldPosition(targetPosition.x, targetPosition.y);
         
-        // Animate movement with jump
-        Vector3 startPos = transform.position;
-        Vector3 midPoint = (startPos + targetWorldPos) / 2f;
-        midPoint.y += jumpHeight;
+        // Trigger movement animation
+        TriggerMovementAnimation();
+        SetWalkingState(true);
         
-        Sequence moveSequence = DOTween.Sequence();
-        
-        moveSequence.Append(transform.DOMove(midPoint, moveAnimationDuration * 0.5f)
-            .SetEase(jumpCurve));
-        
-        moveSequence.Append(transform.DOMove(targetWorldPos, moveAnimationDuration * 0.5f)
-            .SetEase(jumpCurve));
-        
-        moveSequence.OnComplete(() =>
-        {
-            isMoving = false;
-            
-            // Register at new position
-            GridCell targetCell = GridManager.Instance.GetCell(targetPosition.x, targetPosition.y);
-            if (targetCell != null)
+        // Animate movement
+        Tween moveTween = transform.DOMove(targetWorldPos, moveAnimationDuration)
+            .SetEase(Ease.Linear)
+            .OnComplete(() =>
             {
-                targetCell.SetOccupied(gameObject);
-            }
-            
-            currentGridPosition = targetPosition;
-            Debug.Log($"[EnemyMovement] {gameObject.name} moved to {targetPosition}");
-        });
+                isMoving = false;
+                SetWalkingState(false);
+                
+                // Register at new position
+                GridCell targetCell = GridManager.Instance.GetCell(targetPosition.x, targetPosition.y);
+                if (targetCell != null)
+                {
+                    targetCell.SetOccupied(gameObject);
+                }
+                
+                currentGridPosition = targetPosition;
+                Debug.Log($"[EnemyMovement] {gameObject.name} moved to {targetPosition}");
+            });
         
-        moveSequence.Play();
-        
-        yield return moveSequence.WaitForCompletion();
+        yield return moveTween.WaitForCompletion();
     }
     
     private Direction GetDirectionTo(Vector2Int targetPosition)
@@ -216,37 +207,37 @@ public class EnemyMovement : MonoBehaviour
     
     private void SetDirection(Direction direction)
     {
-        if (currentDirection != direction)
-        {
-            currentDirection = direction;
-            UpdateVisualDirection();
-        }
+        currentDirection = direction;
+        UpdateVisualFlip();
     }
     
-    private void UpdateVisualDirection()
+    private void UpdateVisualFlip()
     {
-        if (visualTransform == null) return;
+        if (visual == null) return;
         
-        float targetRotation = 0f;
+        Vector3 scale = visual.localScale;
+        if (currentDirection == Direction.Left)
+            scale.x = -Mathf.Abs(scale.x);
+        else if (currentDirection == Direction.Right)
+            scale.x = Mathf.Abs(scale.x);
         
-        switch (currentDirection)
-        {
-            case Direction.Up:
-                targetRotation = 0f;
-                break;
-            case Direction.Down:
-                targetRotation = 180f;
-                break;
-            case Direction.Left:
-                targetRotation = 90f;
-                break;
-            case Direction.Right:
-                targetRotation = -90f;
-                break;
-        }
+        visual.localScale = scale;
+    }
+    
+    private void TriggerMovementAnimation()
+    {
+        if (animator == null) return;
         
-        visualTransform.DORotate(new Vector3(0, 0, targetRotation), rotationDuration)
-            .SetEase(Ease.OutQuad);
+        if (currentDirection == Direction.Up)
+            animator.SetTrigger("RunBack");
+        else
+            animator.SetTrigger("Run");
+    }
+    
+    private void SetWalkingState(bool isWalking)
+    {
+        if (animator == null) return;
+        animator.SetBool("IsWalking", isWalking);
     }
     
     public void UpdateGridPosition(Vector2Int newPosition)
