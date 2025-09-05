@@ -33,18 +33,24 @@ public class DependencyManager : MonoBehaviour
     
     private void CollectManagers()
     {
+        // Initialize in correct dependency order
+        // 1. GridManager (no dependencies)
         if (gridManager != null)
             managers.Add(gridManager);
         
+        // 2. BoardManager (depends on GridManager)
         if (boardManager != null)
             managers.Add(boardManager);
         
+        // 3. SlotManager (depends on BoardManager)
         if (slotManager != null)
             managers.Add(slotManager);
         
+        // 4. EnemyManager (depends on GridManager and BoardManager)
         if (enemyManager != null)
             managers.Add(enemyManager);
         
+        // 5. WorldManager (depends on EnemyManager)
         if (worldManager != null)
             managers.Add(worldManager);
     }
@@ -58,23 +64,29 @@ public class DependencyManager : MonoBehaviour
             return;
         }
         
+        // Start sequential initialization
+        StartCoroutine(InitializeManagersSequentially());
+    }
+    
+    private IEnumerator InitializeManagersSequentially()
+    {
+        Debug.Log("[DependencyManager] Starting sequential initialization...");
+        
         foreach (var manager in managers)
         {
-            StartCoroutine(InitializeManager(manager));
+            yield return InitializeManager(manager);
         }
+        
+        OnAllManagersInitialized();
     }
     
     private IEnumerator InitializeManager(IManager manager)
     {
+        Debug.Log($"[DependencyManager] Initializing {manager.GetType().Name}...");
         yield return manager.Initialize();
         
         initializedManagerCount++;
         Debug.Log($"[DependencyManager] {manager.GetType().Name} initialized ({initializedManagerCount}/{managers.Count})");
-        
-        if (initializedManagerCount >= managers.Count)
-        {
-            OnAllManagersInitialized();
-        }
     }
     
     private void OnAllManagersInitialized()
