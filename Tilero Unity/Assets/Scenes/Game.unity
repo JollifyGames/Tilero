@@ -38,6 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
+  m_IndirectSpecularColor: {r: 0, g: 0, b: 0, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -424,7 +425,7 @@ MonoBehaviour:
   - {fileID: 1358851251}
   - {fileID: 1147827652}
   - {fileID: 685225405}
-  deckSO: {fileID: 11400000, guid: 357a02e104fcd2d40b48db3f1656f36b, type: 2}
+  deckSO: {fileID: 11400000, guid: a4cb681dd71b59840b43e0b7e7fd6f72, type: 2}
 --- !u!1 &170057652
 GameObject:
   m_ObjectHideFlags: 0
@@ -4980,7 +4981,7 @@ Tilemap:
       - {fileID: 1607886606, guid: a4a14bfe11a730042a662cd4579f8fd7, type: 3}
       - {fileID: -945847060, guid: a4a14bfe11a730042a662cd4579f8fd7, type: 3}
       - {fileID: 1823927445, guid: a4a14bfe11a730042a662cd4579f8fd7, type: 3}
-      m_AnimationSpeed: 12
+      m_AnimationSpeed: 12.000001
       m_AnimationTimeOffset: 0
       m_Flags: 0
   - first: {x: 1, y: -6, z: 0}
@@ -5037,7 +5038,7 @@ Tilemap:
       - {fileID: 1021087347, guid: 1524e2b402ec76f4eb43e6be60c55ba1, type: 3}
       - {fileID: 267110440, guid: 1524e2b402ec76f4eb43e6be60c55ba1, type: 3}
       - {fileID: -1355367692, guid: 1524e2b402ec76f4eb43e6be60c55ba1, type: 3}
-      m_AnimationSpeed: 12
+      m_AnimationSpeed: 12.000001
       m_AnimationTimeOffset: 0
       m_Flags: 0
   - first: {x: -4, y: -5, z: 0}
