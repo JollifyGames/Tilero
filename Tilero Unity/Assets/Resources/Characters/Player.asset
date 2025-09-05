@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a91c02056c9a26343b3b87bf7c46e780, type: 3}
   m_Name: Player
   m_EditorClassIdentifier: 
-  hp: 100
+  hp: 50
   damage: 10
   defense: 5
-  dodge: 0.1
-  crit: 0.2
+  dodge: 0.05
+  crit: 0.08
