@@ -9,11 +9,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a91c02056c9a26343b3b87bf7c46e780, type: 3}
-  m_Name: Enemy_Test
+  m_Script: {fileID: 11500000, guid: 6c9619f2894eef547b71349f1047e268, type: 3}
+  m_Name: SL_Attack
   m_EditorClassIdentifier: 
-  hp: 50
-  damage: 10
-  defense: 2
-  dodge: 0.03
-  crit: 0.05
+  patternName: 
+  description: 
+  steps:
+  - position: {x: 0, y: 1}
+    pieceType: 0
+  - position: {x: 0, y: 0}
+    pieceType: 1
+  - position: {x: 1, y: 0}
+    pieceType: 2
