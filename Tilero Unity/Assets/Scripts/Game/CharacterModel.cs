@@ -18,6 +18,9 @@ public class CharacterModel
     public float Dodge => dodge;
     public float Crit => crit;
     
+    public delegate void HpChangedDelegate(int currentHp, int maxHp);
+    public event HpChangedDelegate OnHpChanged;
+    
     public CharacterModel(CharacterStats stats)
     {
         if (stats != null)
@@ -41,6 +44,8 @@ public class CharacterModel
             dodge = 0f;
             crit = 0f;
         }
+        
+        OnHpChanged?.Invoke(currentHp, maxHp);
     }
     
     public void TakeDamage(int damageAmount)
@@ -48,6 +53,7 @@ public class CharacterModel
         currentHp -= damageAmount;
         currentHp = Mathf.Max(0, currentHp);
         Debug.Log($"[CharacterModel] Took {damageAmount} damage. HP: {currentHp}/{maxHp}");
+        OnHpChanged?.Invoke(currentHp, maxHp);
     }
     
     public void Heal(int healAmount)
@@ -55,6 +61,7 @@ public class CharacterModel
         currentHp += healAmount;
         currentHp = Mathf.Min(maxHp, currentHp);
         Debug.Log($"[CharacterModel] Healed {healAmount}. HP: {currentHp}/{maxHp}");
+        OnHpChanged?.Invoke(currentHp, maxHp);
     }
     
     public bool IsDead()

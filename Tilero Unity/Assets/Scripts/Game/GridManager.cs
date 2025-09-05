@@ -18,8 +18,13 @@ public class GridManager : MonoBehaviour, IManager
     [SerializeField] private GameObject previewPrefab;
     [SerializeField] private Transform previewParent;
     
+    [Header("Obstacle Settings")]
+    [SerializeField] private System.Collections.Generic.List<Vector2Int> obstaclesList = new System.Collections.Generic.List<Vector2Int>();
+    [SerializeField] private GameObject obstaclePrefab;
+    
     private GridCell[,] grid;
     private System.Collections.Generic.List<GameObject> activePreviewObjects = new System.Collections.Generic.List<GameObject>();
+    private System.Collections.Generic.List<GameObject> obstacleObjects = new System.Collections.Generic.List<GameObject>();
     
     public Vector2Int GridSize => gridSize;
     public Vector3 GridWorldPosition => gridWorldPosition;
@@ -39,6 +44,7 @@ public class GridManager : MonoBehaviour, IManager
     public IEnumerator Initialize()
     {
         CreateGrid();
+        CreateObstacles();
         yield return null;
     }
     
@@ -69,6 +75,41 @@ public class GridManager : MonoBehaviour, IManager
         }
         
         Debug.Log($"[GridManager] Grid created: {gridSize.x}x{gridSize.y} at position {gridWorldPosition}");
+    }
+    
+    private void CreateObstacles()
+    {
+        if (obstaclesList == null || obstaclesList.Count == 0)
+        {
+            Debug.Log("[GridManager] No obstacles to create");
+            return;
+        }
+        
+        foreach (var obstaclePos in obstaclesList)
+        {
+            if (IsValidPosition(obstaclePos.x, obstaclePos.y))
+            {
+                GridCell cell = grid[obstaclePos.x, obstaclePos.y];
+                cell.IsObstacle = true;
+                cell.IsOccupied = true;
+                
+                if (obstaclePrefab != null)
+                {
+                    GameObject obstacle = Instantiate(obstaclePrefab, cell.WorldPosition, Quaternion.identity, cellParent);
+                    obstacle.name = $"Obstacle_{obstaclePos.x}_{obstaclePos.y}";
+                    obstacleObjects.Add(obstacle);
+                    cell.OccupyingObject = obstacle;
+                }
+                
+                Debug.Log($"[GridManager] Obstacle created at position ({obstaclePos.x}, {obstaclePos.y})");
+            }
+            else
+            {
+                Debug.LogWarning($"[GridManager] Invalid obstacle position: ({obstaclePos.x}, {obstaclePos.y})");
+            }
+        }
+        
+        Debug.Log($"[GridManager] Created {obstacleObjects.Count} obstacles");
     }
     
     public Vector3 GetCellWorldPosition(int x, int y)
@@ -109,6 +150,20 @@ public class GridManager : MonoBehaviour, IManager
     public bool IsValidPosition(int x, int y)
     {
         return x >= 0 && x < gridSize.x && y >= 0 && y < gridSize.y;
+    }
+    
+    public bool IsWalkable(int x, int y)
+    {
+        if (!IsValidPosition(x, y))
+            return false;
+        
+        GridCell cell = grid[x, y];
+        return !cell.IsObstacle && !cell.IsOccupied;
+    }
+    
+    public bool IsWalkable(Vector2Int position)
+    {
+        return IsWalkable(position.x, position.y);
     }
     
     public GridCell[,] GetGrid()

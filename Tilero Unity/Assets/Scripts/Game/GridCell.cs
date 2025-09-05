@@ -10,6 +10,7 @@ public class GridCell
     public GameObject OccupyingObject { get; set; }
     public GameObject OccupiedObject => OccupyingObject; // Alias for compatibility
     public Vector2Int GridPosition => new Vector2Int(X, Y);
+    public bool IsObstacle { get; set; }
     
     public GridCell(int x, int y, Vector3 worldPosition)
     {
@@ -18,6 +19,7 @@ public class GridCell
         WorldPosition = worldPosition;
         IsOccupied = false;
         OccupyingObject = null;
+        IsObstacle = false;
     }
     
     public void SetOccupied(GameObject occupyingObject)

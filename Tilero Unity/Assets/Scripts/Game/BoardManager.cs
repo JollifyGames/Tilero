@@ -100,6 +100,12 @@ public class BoardManager : MonoBehaviour, IManager
         }
         
         GridCell targetCell = GridManager.Instance.GetCell(toCell.x, toCell.y);
+        if (targetCell.IsObstacle)
+        {
+            Debug.Log($"[BoardManager] Cell {toCell} is an obstacle");
+            return false;
+        }
+        
         if (targetCell.IsOccupied)
         {
             Debug.Log($"[BoardManager] Cell {toCell} is occupied");

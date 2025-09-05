@@ -134,7 +134,7 @@ public class EnemyMovement : MonoBehaviour
             return false;
         
         GridCell cell = GridManager.Instance.GetCell(position.x, position.y);
-        return cell != null && !cell.IsOccupied;
+        return cell != null && !cell.IsOccupied && !cell.IsObstacle;
     }
     
     private bool IsPlayerAt(Vector2Int position)
